@@ -3,7 +3,7 @@ TARGET = debug
 NASM = nasm
 LD = ld
 
-AFLAGS = -f elf32
+AFLAGS = -f elf32 -i src/
 LFLAGS = -melf_i386 -nostdlib -T linker.ld
 
 ifeq ($(TARGET),debug)
