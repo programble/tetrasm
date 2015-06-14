@@ -11,14 +11,25 @@ section .bss
 STACK_SIZE equ 0x4000
 stack resb STACK_SIZE
 
+section .data
+hello db 'Hello, World!', 0
+
 section .text
 global boot
 boot:
   mov esp, stack + STACK_SIZE
   mov ebp, esp
 
+%include "video.mac"
+extern puts
+extern clear
+
 main:
-  mov byte [0xB8000], 'H'
+  mov esi, hello
+  mov cx, 0
+  mov dh, FG_YELLOW | BG_BLUE
+  call clear
+  call puts
 
 hang:
   hlt

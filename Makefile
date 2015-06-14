@@ -1,13 +1,13 @@
 NASM = nasm
 LD = ld
 
-AFLAGS = -f elf32
+AFLAGS = -f elf32 -ggdb
 LFLAGS = -melf_i386 -nostdlib -T linker.ld
 
-tetrasm.elf: linker.ld tetrasm.o
+tetrasm.elf: linker.ld tetrasm.o video.o
 	$(LD) $(LFLAGS) $^ -o $@
 
-tetrasm.o: tetrasm.asm
+%.o: %.asm
 	$(NASM) $(AFLAGS) $^ -o $@
 
 clean:
