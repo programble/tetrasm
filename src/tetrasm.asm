@@ -4,6 +4,13 @@ hello db 'Hello, World!', 0
 
 section .text
 
+; Divide by zero to cause a triple fault.
+reset:
+  mov ax, 1
+  xor dl, dl
+  div dl
+  jmp reset
+
 %include "video.mac"
 extern clear
 extern putc
@@ -43,15 +50,21 @@ main:
     call scan
     test eax, eax
     je .loop
+
+    cmp al, 0x93
+    je reset
+
     push word 16 << 8 | 2
     push eax
     call itoa
     add esp, 6
+
     push word 8 << 8 | 8
     push word FG_BRIGHT | FG_GREEN | BG_GREEN
     push eax
     call puts
     add esp, 8
+
     jmp .loop
 
 hang:
