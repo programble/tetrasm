@@ -14,8 +14,7 @@ scan:
   xor eax, eax
 
   ; Scan.
-  mov dx, 0x60
-  in ax, dx
+  in al, 0x60
 
   ; If scancode has changed, update key and return it.
   cmp al, [key]
