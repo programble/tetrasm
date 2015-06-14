@@ -24,6 +24,7 @@ boot:
 extern clear
 extern putc
 extern puts
+extern itoa
 
 main:
   push BG_GREEN
@@ -38,6 +39,17 @@ main:
   push word 3 << 8 | 3
   push word FG_BRIGHT | FG_BLUE | BG_BLUE
   push hello
+  call puts
+  add esp, 8
+
+  push word 10 << 8 | 2
+  push dword 42
+  call itoa
+  add esp, 6
+
+  push word 4 << 8 | 1
+  push word FG_BLACK | BG_GREEN
+  push eax
   call puts
   add esp, 8
 
