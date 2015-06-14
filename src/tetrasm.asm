@@ -17,6 +17,7 @@ extern putc
 extern puts
 extern itoa
 extern scan
+extern rtcs
 
 global main
 main:
@@ -47,6 +48,17 @@ main:
   add esp, 8
 
   .loop:
+    call rtcs
+    push word 16 << 8 | 2
+    push eax
+    call itoa
+    add esp, 6
+    push word 9 << 8 | 9
+    push word FG_YELLOW | FG_BRIGHT | BG_GREEN
+    push eax
+    call puts
+    add esp, 8
+
     call scan
     test eax, eax
     je .loop
