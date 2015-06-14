@@ -25,6 +25,7 @@ extern clear
 extern putc
 extern puts
 extern itoa
+extern scan
 
 main:
   push BG_GREEN
@@ -52,6 +53,21 @@ main:
   push eax
   call puts
   add esp, 8
+
+  .loop:
+    call scan
+    test eax, eax
+    je .loop
+    push word 16 << 8 | 2
+    push eax
+    call itoa
+    add esp, 6
+    push word 8 << 8 | 8
+    push word FG_BRIGHT | FG_GREEN | BG_GREEN
+    push eax
+    call puts
+    add esp, 8
+    jmp .loop
 
 hang:
   hlt
