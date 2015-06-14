@@ -21,15 +21,25 @@ boot:
   mov ebp, esp
 
 %include "video.mac"
-extern puts
 extern clear
+extern putc
+extern puts
 
 main:
-  mov esi, hello
-  mov cx, 0
-  mov dh, FG_YELLOW | BG_BLUE
+  push BG_GREEN
   call clear
+  add esp, 2
+
+  push word 1 << 8 | 1
+  push word 'H' | FG_BRIGHT | FG_GRAY | BG_BLACK
+  call putc
+  add esp, 4
+
+  push word 3 << 8 | 3
+  push word FG_BRIGHT | FG_BLUE | BG_BLUE
+  push hello
   call puts
+  add esp, 8
 
 hang:
   hlt

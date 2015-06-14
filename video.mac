@@ -1,22 +1,22 @@
 %define COLS 80
 %define ROWS 25
 
-%define FG_BLACK   0
-%define FG_BLUE    1
-%define FG_GREEN   2
-%define FG_CYAN    3
-%define FG_RED     4
-%define FG_MAGENTA 5
-%define FG_YELLOW  6
-%define FG_GRAY    7
-%define FG_BRIGHT  8
+%define FG_BLACK   0 << 8
+%define FG_BLUE    1 << 8
+%define FG_GREEN   2 << 8
+%define FG_CYAN    3 << 8
+%define FG_RED     4 << 8
+%define FG_MAGENTA 5 << 8
+%define FG_YELLOW  6 << 8
+%define FG_GRAY    7 << 8
+%define FG_BRIGHT  8 << 8
 
-%define BG_BLACK   0 << 4
-%define BG_BLUE    1 << 4
-%define BG_GREEN   2 << 4
-%define BG_CYAN    3 << 4
-%define BG_RED     4 << 4
-%define BG_MAGENTA 5 << 4
-%define BG_YELLOW  6 << 4
-%define BG_GRAY    7 << 4
-%define BG_BRIGHT  8 << 4
+%define BG_BLACK   0 << 12
+%define BG_BLUE    1 << 12
+%define BG_GREEN   2 << 12
+%define BG_CYAN    3 << 12
+%define BG_RED     4 << 12
+%define BG_MAGENTA 5 << 12
+%define BG_YELLOW  6 << 12
+%define BG_GRAY    7 << 12
+%define BG_BRIGHT  8 << 12
