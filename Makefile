@@ -35,7 +35,7 @@ qemu: $(KERNEL)
 	$(QEMU) $(QFLAGS) -kernel $<
 
 GDB = gdb
-GFLAGS = -ex 'display/i $$pc' -ex 'target remote localhost:1234'
+GFLAGS = -ex 'set disassembly-flavor intel' -ex 'display/i $$pc' -ex 'target remote localhost:1234'
 
 gdb: $(KERNEL)
 	$(GDB) $(GFLAGS) $<
