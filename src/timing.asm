@@ -1,19 +1,23 @@
 section .data
 
-; 64-bit tick count.
-ti dd 0, 0
+; Qword previous tick count.
+ptsc dd 0, 0
 
-last_sec db 0xFF
+; Previous RTC second for tps.
+psec db 0xFF
 
 section .bss
 
-; Number of CPU ticks per millisecond
+; Number of CPU ticks per millisecond.
 global tpms
 tpms resw 1
 
 section .text
 
 ; rtcs()
+; Return the second value of the real-time-clock. Note that the value may or
+; may not be represented such that formatting it as hex displays the correct
+; clock time.
 global rtcs
 rtcs:
   push ebp
@@ -49,39 +53,41 @@ rtcs:
   ret
 
 ; tps()
+; Update tpms based on the number of ticks in the last second, if a second has
+; passed since the last call.
 global tps
 tps:
   push ebp
   mov ebp, esp
-  sub esp, 8 ; tf
+  sub esp, 8 ; ntsc
   push esi
   push edi
 
   ; Return if a second hasn't passed since last call.
   call rtcs
-  cmp al, [last_sec]
+  cmp al, [psec]
   je .ret
-  mov [last_sec], al
+  mov [psec], al
 
   ; Get number of ticks since boot.
   rdtsc
 
-  ; Save tf to update ti.
-  mov [ebp - 8], eax ; tf
-  mov [ebp - 4], edx ; tf
+  ; Save ntsc to update ptsc.
+  mov [ebp - 8], eax ; ntsc
+  mov [ebp - 4], edx ; ntsc
 
   ; Calculate difference in ticks.
-  sub eax, [ti]
-  sbb edx, [ti + 4]
+  sub eax, [ptsc]
+  sbb edx, [ptsc + 4]
 
   ; Divide by 1000 and set tpms.
   mov ecx, 1000
   div ecx
   mov [tpms], eax
 
-  ; Update ti.
-  mov edi, ti
-  lea esi, [ebp - 8] ; tf
+  ; Update ptsc.
+  mov edi, ptsc
+  lea esi, [ebp - 8] ; ntsc
   movsd
   movsd
 
