@@ -14,3 +14,17 @@ boot:
   mov esp, stack + STACK_SIZE
   mov ebp, esp
   jmp main
+
+; Divide by zero to cause a triple fault and reset.
+global reset
+reset:
+  mov ax, 1
+  xor dl, dl
+  div dl
+  jmp reset
+
+; Halt.
+global halt
+halt:
+  hlt
+  jmp halt

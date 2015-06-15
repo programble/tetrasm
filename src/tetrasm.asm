@@ -4,19 +4,13 @@ hello db 'Hello, World!', 0
 
 section .text
 
-; Divide by zero to cause a triple fault.
-reset:
-  mov ax, 1
-  xor dl, dl
-  div dl
-  jmp reset
-
 %include "video.mac"
 extern clear
 extern putc
 extern puts
 extern itoa
 extern scan
+extern reset
 extern rtcs
 extern tps
 extern tpms
