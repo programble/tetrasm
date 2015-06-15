@@ -18,6 +18,8 @@ extern puts
 extern itoa
 extern scan
 extern rtcs
+extern tps
+extern tpms
 
 global main
 main:
@@ -55,6 +57,17 @@ main:
     add esp, 6
     push word 9 << 8 | 9
     push word FG_YELLOW | FG_BRIGHT | BG_GREEN
+    push eax
+    call puts
+    add esp, 8
+
+    call tps
+    push word 10 << 8 | 10
+    push dword [tpms]
+    call itoa
+    add esp, 6
+    push word 10 << 8 | 1
+    push word FG_BLACK | BG_GREEN
     push eax
     call puts
     add esp, 8

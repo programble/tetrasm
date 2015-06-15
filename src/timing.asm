@@ -1,3 +1,16 @@
+section .data
+
+; 64-bit tick count.
+ti dd 0, 0
+
+last_sec db 0xFF
+
+section .bss
+
+; Number of CPU ticks per millisecond
+global tpms
+tpms resw 1
+
 section .text
 
 ; rtcs()
@@ -34,3 +47,47 @@ rtcs:
   mov esp, ebp
   pop ebp
   ret
+
+; tps()
+global tps
+tps:
+  push ebp
+  mov ebp, esp
+  sub esp, 8 ; tf
+  push esi
+  push edi
+
+  ; Return if a second hasn't passed since last call.
+  call rtcs
+  cmp al, [last_sec]
+  je .ret
+  mov [last_sec], al
+
+  ; Get number of ticks since boot.
+  rdtsc
+
+  ; Save tf to update ti.
+  mov [ebp - 8], eax ; tf
+  mov [ebp - 4], edx ; tf
+
+  ; Calculate difference in ticks.
+  sub eax, [ti]
+  sbb edx, [ti + 4]
+
+  ; Divide by 1000 and set tpms.
+  mov ecx, 1000
+  div ecx
+  mov [tpms], eax
+
+  ; Update ti.
+  mov edi, ti
+  lea esi, [ebp - 8] ; tf
+  movsd
+  movsd
+
+  .ret:
+    pop edi
+    pop esi
+    mov esp, ebp
+    pop ebp
+    ret
