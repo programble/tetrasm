@@ -1,4 +1,4 @@
-STACK_SIZE equ 0x4000
+STACK_SIZE equ 0x100
 
 section .bss
 
