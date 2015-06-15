@@ -40,7 +40,7 @@ itoa:
     ; Check if we've reached the right width yet.
     inc cl
     cmp cl, [ebp + 12] ; width
-    jl .loop
+    jb .loop
 
   ; The last movsb brought us too far back.
   lea eax, [edi + 1]
