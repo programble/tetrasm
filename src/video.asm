@@ -4,13 +4,14 @@
 
 section .text
 
-; putc(word char, word yx)
+; putc(word char, byte x, byte y)
+; Put char at x, y. To apply attributes, OR char with constants in video.mac.
 global putc
 putc:
   push ebp
   mov ebp, esp
 
-  ; Calculate VRAM index.
+  ; Calculate VRAM index = y * COLS + x.
   movzx eax, byte [ebp + 11] ; y
   mov edx, COLS
   mul edx
@@ -24,7 +25,8 @@ putc:
   pop ebp
   ret
 
-; puts(dword string, word attributes, word yx)
+; puts(dword string, word attributes, byte x, byte y)
+; Put null-terminated string at x, y with attributes.
 global puts
 puts:
   push ebp
@@ -32,36 +34,38 @@ puts:
   push esi
 
   ; Duplicate yx for putc.
-  push word [ebp + 14] ; yx
+  push word [ebp + 14] ; x, y
 
   ; Load string pointer for iteration.
   mov esi, [ebp + 8] ; string
 
-  .cond:
+  .loop:
     cmp byte [esi], 0
     je .ret
 
-  .loop:
-    ; Apply attributes
+    ; Apply attributes.
     movzx ax, byte [esi]
     or ax, [ebp + 12] ; attributes
 
+    ; Call putc, but leave coordinates on the stack.
     push ax
     call putc
     add esp, 2
 
-    ; Increment pointer and coordinates
+    ; Increment pointer and coordinates.
     inc esi
     inc word [esp]
-    jmp .cond
+    jmp .loop
 
   .ret:
+    add esp, 2 ; x, y for putc
     pop esi
     mov esp, ebp
     pop ebp
     ret
 
 ; clear(word attributes)
+; Clear the screen by filling it with spaces with attributes.
 global clear
 clear:
   push ebp
@@ -76,16 +80,14 @@ clear:
   or edx, eax
 
   mov edi, VRAM
-  .cond:
-    cmp edi, VRAM + COLS * ROWS * 2
-    jg .ret
   .loop:
     mov [edi], edx
     add edi, 4
-    jmp .cond
 
-  .ret:
-    pop edi
-    mov esp, ebp
-    pop ebp
-    ret
+    cmp edi, VRAM + COLS * ROWS * 2
+    jne .loop
+
+  pop edi
+  mov esp, ebp
+  pop ebp
+  ret
