@@ -1,6 +1,8 @@
 section .data
 
 hello db 'Hello, World!', 0
+timer dd 0, 0
+flip db 0
 
 section .text
 
@@ -14,6 +16,7 @@ extern reset
 extern rtcs
 extern tps
 extern tpms
+extern interval
 
 global main
 main:
@@ -65,6 +68,24 @@ main:
     push eax
     call puts
     add esp, 8
+
+    push dword 500
+    push timer
+    call interval
+    add esp, 8
+    test al, al
+    jz .noflip
+    xor byte [flip], 1
+    .noflip:
+    mov dx, ' ' | BG_GREEN
+    cmp byte [flip], 1
+    jne .noyellow
+    mov dx, ' ' | BG_YELLOW
+    .noyellow:
+    push word 18
+    push dx
+    call putc
+    add esp, 4
 
     call scan
     test eax, eax

@@ -97,3 +97,58 @@ tps:
     mov esp, ebp
     pop ebp
     ret
+
+; interval(dword timer, dword ms)
+; Return non-zero every ms milliseconds for the 64-bit tick count pointed to by
+; timer.
+global interval
+interval:
+  push ebp
+  mov ebp, esp
+  sub esp, 8 ; ntsc
+  push ebx
+  push esi
+  push edi
+
+  ; Calculate number of ticks for ms and store in esi:edi.
+  mov eax, [tpms]
+  mul dword [ebp + 12] ; ms
+  mov esi, eax
+  mov edi, edx
+
+  ; Get number of ticks and save to update timer.
+  rdtsc
+  mov [ebp - 8], eax ; ntsc
+  mov [ebp - 4], edx ; ntsc
+
+  ; Get difference in ticks.
+  mov ebx, [ebp + 8]
+  sub eax, [ebx]
+  sbb edx, [ebx + 4]
+
+  ; Check if difference is greater than or equal to ticks for ms.
+  cmp edx, edi
+  jb .false
+  ja .true
+  cmp eax, esi
+  jb .false
+
+  .true:
+    ; Update timer with new tsc.
+    lea esi, [ebp - 8] ; ntsc
+    mov edi, ebx
+    movsd
+    movsd
+
+    jmp .ret
+
+  .false:
+    xor eax, eax
+
+  .ret:
+    pop edi
+    pop esi
+    pop ebx
+    mov esp, ebp
+    pop ebp
+    ret
