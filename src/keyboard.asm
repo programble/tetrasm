@@ -1,10 +1,13 @@
 section .data
 
+; Previous scancode.
 key db 0
 
 section .text
 
 ; scan()
+; Scan for new keypress. Returns new scancode if changed since last call, zero
+; otherwise.
 global scan
 scan:
   push ebp
