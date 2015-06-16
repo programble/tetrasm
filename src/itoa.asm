@@ -21,12 +21,12 @@ itoa:
   lea edi, [output + 32]
   std
 
-  ; Keep track of width.
-  xor cl, cl
-
   ; Load number and radix for division and iteration.
   mov eax, [ebp + 8] ; number
   movzx ebx, byte [ebp + 13] ; radix
+
+  ; Loop width times.
+  movzx ecx, byte [ebp + 12] ; width
 
   .loop:
     ; Clear remainder / upper bits of dividend.
@@ -39,10 +39,7 @@ itoa:
     lea esi, [digits + edx]
     movsb
 
-    ; Check if we've reached the right width yet.
-    inc cl
-    cmp cl, [ebp + 12] ; width
-    jb .loop
+    loop .loop
 
   ; The last movsb brought us too far back.
   lea eax, [edi + 1]
