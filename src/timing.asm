@@ -93,6 +93,29 @@ tps:
     pop ebp
     ret
 
+; calibrate()
+; Wait at least a full second to calibrate timing.
+global calibrate
+calibrate:
+  push ebx
+
+  call tps
+  mov ebx, [tpms]
+
+  .loop1:
+    call tps
+    cmp ebx, [tpms]
+    je .loop1
+
+  mov ebx, [tpms]
+  .loop2:
+    call tps
+    cmp ebx, [tpms]
+    je .loop2
+
+  pop ebx
+  ret
+
 ; interval(dword timer, dword ms)
 ; Return non-zero every ms milliseconds for the 64-bit tick count pointed to by
 ; timer.

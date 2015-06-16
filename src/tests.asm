@@ -5,6 +5,8 @@
 section .data
 
 hello db 'Hello, World!', 0
+calibratestr db 'Calibrating...', 0
+caliblankstr db '              ', 0
 
 key db 0
 
@@ -84,6 +86,22 @@ test_itoa:
   call puts
 
   add esp, 14
+
+extern calibrate
+test_calibrate:
+  push word 0x0501
+  push word ATTRS
+  push calibratestr
+  call puts
+
+  call calibrate
+
+  push word 0x0501
+  push word ATTRS
+  push caliblankstr
+  call puts
+
+  add esp, 16
 
 test_loop:
 
