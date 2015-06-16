@@ -24,13 +24,15 @@ itoa:
   ; Keep track of width.
   xor cl, cl
 
-  ; Load number for division and iteration.
+  ; Load number and radix for division and iteration.
   mov eax, [ebp + 8] ; number
+  movzx ebx, byte [ebp + 13] ; radix
 
   .loop:
+    ; Clear remainder / upper bits of dividend.
+    xor edx, edx
+
     ; Divide number by radix.
-    movzx ebx, byte [ebp + 13] ; radix
-    cdq
     div ebx
 
     ; Use remainder to set digit in output string.
