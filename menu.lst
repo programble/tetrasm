@@ -1,0 +1,4 @@
+default 0
+timeout 0
+title TETRASM
+kernel /boot/tetrasm.elf
