@@ -2,6 +2,15 @@
 
 %define VRAM 0xB8000
 
+; Calculate VRAM index = y * COLS + x.
+%macro vram_index 1
+  movzx eax, byte [ebp + %1 + 1] ; y
+  mov edx, COLS
+  mul edx
+  movzx edx, byte [ebp + %1] ; x
+  add eax, edx
+%endmacro
+
 section .text
 
 ; putc(byte char, byte attrs, byte x, byte y)
@@ -11,14 +20,9 @@ putc:
   push ebp
   mov ebp, esp
 
-  ; Calculate VRAM index = y * COLS + x.
-  movzx eax, byte [ebp + 11] ; y
-  mov edx, COLS
-  mul edx
-  movzx edx, byte [ebp + 10] ; x
-  add eax, edx
+  vram_index 10
 
-  mov dx, [ebp + 8] ; char
+  mov dx, [ebp + 8] ; char, attrs
   mov [VRAM + eax * 2], dx
 
   mov esp, ebp
@@ -34,12 +38,7 @@ puts:
   push esi
   push edi
 
-  ; Calculate initial VRAM index = y * COLS + x
-  movzx eax, byte [ebp + 15] ; y
-  mov edx, COLS
-  mul edx
-  movzx edx, byte [ebp + 14] ; x
-  add eax, edx
+  vram_index 14
 
   lea edi, [VRAM + eax * 2]
   mov esi, [ebp + 8] ; string
