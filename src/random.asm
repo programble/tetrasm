@@ -8,6 +8,11 @@ rand:
   mov ebp, esp
 
   rdtsc
+
+  ; Zero out edx so quotient can always fit in eax.
+  xor edx, edx
+
+  ; Modulo range.
   div dword [ebp + 8] ; range
   mov eax, edx
 
