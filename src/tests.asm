@@ -5,8 +5,15 @@
 section .data
 
 hello db 'Hello, World!', 0
-timer dd 0, 0
+
+key db 0
+
+itimer dd 0, 0
 marquee dd 1
+
+dtimer dd 0, 0
+delaystr db 'DELAY', 0
+blankstr db '     ', 0
 
 section .text
 
@@ -74,6 +81,30 @@ test_itoa:
 
 test_loop:
 
+extern scan
+extern reset
+test_scan:
+  call scan
+  mov byte [key], al
+  test al, al
+  jz .skip
+
+  cmp al, 0x93 ; R
+  je reset
+
+  push word 0x1002
+  push eax
+  call itoa
+
+  push word 0x0501
+  push word ATTRS
+  push eax
+  call puts
+
+  add esp, 14
+
+  .skip:
+
 extern rtcs
 test_rtcs:
   call rtcs
@@ -82,7 +113,7 @@ test_rtcs:
   push eax
   call itoa
 
-  push word 0x0501
+  push word 0x0701
   push word ATTRS
   push eax
   call puts
@@ -98,7 +129,7 @@ test_tps:
   push dword [tpms]
   call itoa
 
-  push word 0x0601
+  push word 0x0801
   push word ATTRS
   push eax
   call puts
@@ -108,30 +139,30 @@ test_tps:
 extern interval
 test_interval:
   push dword 500
-  push timer
+  push itimer
   call interval
 
-  test al, al
+  test eax, eax
   jz .render
   rol dword [marquee], 1
 
   .render:
-    ; High bits of timer
+    ; High bits of itimer
     push word 0x1008
-    push dword [timer + 4]
+    push dword [itimer + 4]
     call itoa
 
-    push word 0x0701
+    push word 0x0901
     push word ATTRS
     push eax
     call puts
 
-    ; Low bits of timer
+    ; Low bits of itimer
     push word 0x1008
-    push dword [timer]
+    push dword [itimer]
     call itoa
 
-    push word 0x0709
+    push word 0x0909
     push word ATTRS
     push eax
     call puts
@@ -141,34 +172,73 @@ test_interval:
     push dword [marquee]
     call itoa
 
-    push word 0x0712
+    push word 0x0912
     push word ATTRS
     push eax
     call puts
 
   add esp, 50
 
-extern scan
-extern reset
-test_scan:
-  call scan
-  test al, al
-  jz .skip
-
-  cmp al, 0x93 ; R
-  je reset
-
-  push word 0x1002
-  push eax
+extern delay
+test_delay:
+  ; High bits of dtimer
+  push word 0x1008
+  push dword [dtimer + 4]
   call itoa
 
-  push word 0x0901
+  push word 0x0A01
   push word ATTRS
   push eax
   call puts
 
-  add esp, 14
+  ; Low bits of dtimer
+  push word 0x1008
+  push dword [dtimer]
+  call itoa
 
-  .skip:
+  push word 0x0A09
+  push word ATTRS
+  push eax
+  call puts
+
+  add esp, 28
+
+  ; Check if waiting.
+  cmp dword [dtimer], 0
+  je .clear
+  push dword 2000
+  push dtimer
+  call delay
+  add esp, 8
+  test eax, eax
+  jnz .clear
+
+  ; Show delay display.
+  push word 0x0A12
+  push word ATTRS
+  push delaystr
+  call puts
+  add esp, 8
+  jmp .end
+
+  .clear:
+    ; Clear delay display.
+    push word 0x0A12
+    push word ATTRS
+    push blankstr
+    call puts
+
+    add esp, 8
+
+  ; Start delay on key press.
+  cmp byte [key], 0xA0 ; D
+  jne .end
+
+  push dword 2000
+  push dtimer
+  call delay
+  add esp, 8
+
+  .end:
 
 jmp test_loop

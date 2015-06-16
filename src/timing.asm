@@ -117,7 +117,7 @@ interval:
   mov [ebp - 4], edx ; ntsc
 
   ; Get difference in ticks.
-  mov ebx, [ebp + 8]
+  mov ebx, [ebp + 8] ; timer
   sub eax, [ebx]
   sbb edx, [ebx + 4]
 
@@ -139,6 +139,64 @@ interval:
 
   .false:
     xor eax, eax
+
+  .ret:
+    pop edi
+    pop esi
+    pop ebx
+    mov esp, ebp
+    pop ebp
+    ret
+
+; delay(dword timer, dword ms)
+; Return non-zero if at least ms milliseconds have elapsed since the first call
+; for this timer and reset the timer.
+global delay
+delay:
+  push ebp
+  mov ebp, esp
+  push ebx
+  push esi
+  push edi
+
+  ; Check if timer is set. Skip high bits.
+  mov ebx, [ebp + 8] ; timer
+  cmp dword [ebx], 0
+  jne .set
+
+  ; Otherwise, set timer and return zero.
+  rdtsc
+  mov [ebx], eax
+  mov [ebx + 4], edx
+  jmp .false
+
+  .set:
+    ; Calculate number of ticks for ms and store in esi:edi.
+    mov eax, [tpms]
+    mul dword [ebp + 12] ; ms
+    mov esi, eax
+    mov edi, edx
+
+    ; Calculate difference in ticks.
+    rdtsc
+    sub eax, [ebx]
+    sbb edx, [ebx + 4]
+
+    ; Check if difference is greater than or equal to ticks for ms.
+    cmp edx, edi
+    jb .false
+    ja .true
+    cmp eax, esi
+    jb .false
+
+    .true:
+      ; Reset timer.
+      mov dword [ebx], 0
+      mov dword [ebx + 4], 0
+      jmp .ret
+
+    .false:
+      xor eax, eax
 
   .ret:
     pop edi
