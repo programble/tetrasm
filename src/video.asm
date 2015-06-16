@@ -4,8 +4,8 @@
 
 section .text
 
-; putc(word char, byte x, byte y)
-; Put char at x, y. To apply attributes, OR char with constants in video.mac.
+; putc(byte char, byte attrs, byte x, byte y)
+; Put char with attrs at x, y.
 global putc
 putc:
   push ebp
@@ -25,8 +25,8 @@ putc:
   pop ebp
   ret
 
-; puts(dword string, word attributes, byte x, byte y)
-; Put null-terminated string at x, y with attributes.
+; puts(dword string, word attrs, byte x, byte y)
+; Put null-terminated string at x, y with attrs.
 global puts
 puts:
   push ebp
