@@ -20,9 +20,6 @@ section .text
 ; clock time.
 global rtcs
 rtcs:
-  push ebp
-  mov ebp, esp
-
   ; Zero eax for return value.
   xor eax, eax
 
@@ -48,8 +45,6 @@ rtcs:
     mov dl, al
     jne .oloop
 
-  mov esp, ebp
-  pop ebp
   ret
 
 ; tps()

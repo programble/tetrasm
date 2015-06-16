@@ -10,9 +10,6 @@ section .text
 ; otherwise.
 global scan
 scan:
-  push ebp
-  mov ebp, esp
-
   ; Zero eax for return.
   xor eax, eax
 
@@ -30,6 +27,4 @@ scan:
     xor eax, eax
 
   .ret:
-    mov esp, ebp
-    pop ebp
     ret
