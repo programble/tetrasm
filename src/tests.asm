@@ -115,7 +115,7 @@ test_scan:
   test al, al
   jz .skip
 
-  cmp al, 0x93 ; R
+  cmp al, 0x13 ; R
   je reset
 
   push word 0x1002
@@ -257,7 +257,7 @@ test_delay:
     add esp, 8
 
   ; Start delay on key press.
-  cmp byte [key], 0xA0 ; D
+  cmp byte [key], 0x20 ; D
   jne .end
 
   push dword 2000
