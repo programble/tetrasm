@@ -15,6 +15,9 @@ dtimer dd 0, 0
 delaystr db 'DELAY', 0
 blankstr db '     ', 0
 
+random dd 0
+rtimer dd 0, 0
+
 section .text
 
 global tests
@@ -240,5 +243,33 @@ test_delay:
   add esp, 8
 
   .end:
+
+extern rand
+test_rand:
+  push dword 1000
+  push rtimer
+  call interval
+  add esp, 8
+
+  test eax, eax
+  jz .render
+
+  push dword 100
+  call rand
+  add esp, 4
+
+  mov [random], eax
+
+  .render:
+    push word 0x0A03
+    push dword [random]
+    call itoa
+
+    push word 0x0C01
+    push word ATTRS
+    push eax
+    call puts
+
+    add esp, 14
 
 jmp test_loop
