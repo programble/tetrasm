@@ -66,17 +66,16 @@ puts:
     pop ebp
     ret
 
-; clear(word attributes)
-; Clear the screen by filling it with spaces with attributes.
+; clear(byte char, byte attrs)
+; Clear the screen by filling it with char and attributes.
 global clear
 clear:
   push ebp
   mov ebp, esp
   push edi
 
-  ; Set up two spaces with attributes
-  movzx edx, word [ebp + 8] ; attributes
-  mov dl, ' '
+  ; Double up char and attrs.
+  movzx edx, word [ebp + 8] ; char, attrs
   mov eax, edx
   shl edx, 16
   or edx, eax
