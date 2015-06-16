@@ -32,33 +32,35 @@ puts:
   push ebp
   mov ebp, esp
   push esi
+  push edi
 
-  ; Duplicate yx for putc.
-  push word [ebp + 14] ; x, y
+  ; Calculate initial VRAM index = y * COLS + x
+  movzx eax, byte [ebp + 15] ; y
+  mov edx, COLS
+  mul edx
+  movzx edx, byte [ebp + 14] ; x
+  add eax, edx
 
-  ; Load string pointer for iteration.
+  lea edi, [VRAM + eax * 2]
   mov esi, [ebp + 8] ; string
+
+  ; Set up attributes for each character.
+  mov dx, [ebp + 12] ; attributes
 
   .loop:
     cmp byte [esi], 0
     je .ret
 
-    ; Apply attributes.
-    movzx ax, byte [esi]
-    or ax, [ebp + 12] ; attributes
+    ; Write character with attributes.
+    mov dl, byte [esi]
+    mov [edi], dx
 
-    ; Call putc, but leave coordinates on the stack.
-    push ax
-    call putc
-    add esp, 2
-
-    ; Increment pointer and coordinates.
     inc esi
-    inc word [esp]
+    add edi, 2
     jmp .loop
 
   .ret:
-    add esp, 2 ; x, y for putc
+    pop edi
     pop esi
     mov esp, ebp
     pop ebp
