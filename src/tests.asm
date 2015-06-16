@@ -18,6 +18,9 @@ blankstr db '     ', 0
 random dd 0
 rtimer dd 0, 0
 
+array db 'ABCDE', 0
+stimer dd 0, 0
+
 section .text
 
 global tests
@@ -271,5 +274,27 @@ test_rand:
     call puts
 
     add esp, 14
+
+extern shuffle
+test_shuffle:
+  push dword 1000
+  push stimer
+  call interval
+  add esp, 8
+
+  test eax, eax
+  jz .render
+
+  push dword 5
+  push array
+  call shuffle
+  add esp, 8
+
+  .render:
+    push word 0x0D01
+    push word ATTRS
+    push array
+    call puts
+    add esp, 8
 
 jmp test_loop
