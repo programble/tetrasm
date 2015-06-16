@@ -1,4 +1,4 @@
-TARGET = debug
+BUILD = debug,test
 
 NASM = nasm
 LD = ld
@@ -6,8 +6,11 @@ LD = ld
 AFLAGS = -f elf32 -i src/
 LFLAGS = -melf_i386 -nostdlib -T linker.ld
 
-ifeq ($(TARGET),debug)
-  override AFLAGS += -ggdb
+ifneq (,$(findstring debug,$(BUILD)))
+  override AFLAGS += -g -d DEBUG
+endif
+ifneq (,$(findstring test,$(BUILD)))
+  override AFLAGS += -d TEST
 endif
 
 KERNEL = tetrasm.elf
@@ -27,7 +30,7 @@ clean:
 QEMU = qemu-system-i386
 QFLAGS =
 
-ifeq ($(TARGET),debug)
+ifneq (,$(findstring debug,$(BUILD)))
   override QFLAGS += -s -S
 endif
 

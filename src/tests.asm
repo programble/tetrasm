@@ -1,3 +1,5 @@
+%ifdef TEST
+
 %include "video.mac"
 
 %define ATTRS FG_BRIGHT | FG_GRAY | BG_BLUE
@@ -316,3 +318,5 @@ test_shuffle:
     add esp, 8
 
 jmp test_loop
+
+%endif
