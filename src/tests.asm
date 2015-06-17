@@ -7,6 +7,12 @@
 section .data
 
 hello db 'Hello, World!', 0
+
+sprite:
+  dw BG_GREEN,   BG_GREEN,   0, BG_CYAN,   BG_CYAN,   0, BG_RED,  BG_RED
+  dw 0,          0,          0, 0,         0,         0, 0,       0
+  dw BG_MAGENTA, BG_MAGENTA, 0, BG_YELLOW, BG_YELLOW, 0, BG_GRAY, BG_GRAY
+
 calibratestr db 'Calibrating...', 0
 caliblankstr db '              ', 0
 
@@ -55,6 +61,13 @@ test_fill:
   push word BG_GRAY
   call fill
   add esp, 6
+
+extern draw
+test_draw:
+  push dword 0x01380308
+  push sprite
+  call draw
+  add esp, 8
 
 extern itoa
 test_itoa:
