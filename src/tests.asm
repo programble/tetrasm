@@ -49,6 +49,13 @@ test_puts:
   call puts
   add esp, 8
 
+extern fill
+test_fill:
+  push dword 0x01250306
+  push word BG_GRAY
+  call fill
+  add esp, 6
+
 extern itoa
 test_itoa:
   ; Binary

@@ -90,3 +90,40 @@ clear:
   mov esp, ebp
   pop ebp
   ret
+
+; fill(byte char, byte attrs, byte width, byte height, byte x, byte y)
+; Fill a rectangle width, height at x, y with char, attrs.
+global fill
+fill:
+  push ebp
+  mov ebp, esp
+  push edi
+
+  vram_index 12
+  lea edi, [VRAM + eax * 2]
+  mov dx, word [ebp + 8] ; char, attrs
+
+  movzx ecx, byte [ebp + 11] ; height
+  .yloop:
+    ; Save iteration state and pointer to beginning of row.
+    push ecx
+    push edi
+
+    ; Draw one row.
+    movzx ecx, byte [ebp + 10] ; width
+    .xloop:
+      mov [edi], dx
+      add edi, 2
+      loop .xloop
+
+    pop edi
+    pop ecx
+
+    ; Move a row down.
+    add edi, COLS * 2
+    loop .yloop
+
+  pop edi
+  mov esp, ebp
+  pop ebp
+  ret
