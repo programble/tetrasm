@@ -80,12 +80,11 @@ clear:
   or edx, eax
 
   mov edi, VRAM
+  mov ecx, COLS * ROWS / 2
   .loop:
     mov [edi], edx
     add edi, 4
-
-    cmp edi, VRAM + COLS * ROWS * 2
-    jne .loop
+    loop .loop
 
   pop edi
   mov esp, ebp
