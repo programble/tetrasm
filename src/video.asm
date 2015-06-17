@@ -127,3 +127,51 @@ fill:
   mov esp, ebp
   pop ebp
   ret
+
+; draw(dword sprite, byte width, byte height, byte x, byte y)
+; Draw words pointed to by sprite as width, height at x, y. Skips null words.
+global draw
+draw:
+  push ebp
+  mov ebp, esp
+  push esi
+  push edi
+
+  vram_index 14
+  lea edi, [VRAM + eax * 2]
+  mov esi, [ebp + 8] ; sprite
+
+  movzx ecx, byte [ebp + 13] ; height
+  .yloop:
+    ; Save iteration state and pointer to beginning of row.
+    push ecx
+    push edi
+
+    ; Draw one row, skipping nulls.
+    movzx ecx, byte [ebp + 12] ; width
+    .xloop:
+      cmp word [esi], 0
+      jne .movsw
+
+      add esi, 2
+      add edi, 2
+      jmp .continue
+
+      .movsw:
+        movsw
+
+      .continue:
+        loop .xloop
+
+    pop edi
+    pop ecx
+
+    ; Move a row down.
+    add edi, COLS * 2
+    loop .yloop
+
+  pop edi
+  pop esi
+  mov esp, ebp
+  pop ebp
+  ret
