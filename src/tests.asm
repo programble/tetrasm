@@ -38,15 +38,13 @@ test_clear:
 
 extern putc
 test_putc:
-  push word 0x0101
-  push word 'H' | ATTRS
+  push dword 0x0101 << 16 | 'H' | ATTRS
   call putc
   add esp, 4
 
 extern puts
 test_puts:
-  push word 0x0201
-  push word ATTRS
+  push dword 0x0201 << 16 | ATTRS
   push hello
   call puts
   add esp, 8
@@ -58,8 +56,7 @@ test_itoa:
   push dword 42
   call itoa
 
-  push word 0x0301
-  push word ATTRS
+  push dword 0x0301 << 16 | ATTRS
   push eax
   call puts
 
@@ -70,8 +67,7 @@ test_itoa:
   push dword 42
   call itoa
 
-  push word 0x030A
-  push word ATTRS
+  push dword 0x030A << 16 | ATTRS
   push eax
   call puts
 
@@ -82,8 +78,7 @@ test_itoa:
   push dword 42
   call itoa
 
-  push word 0x030E
-  push word ATTRS
+  push dword 0x030E << 16 | ATTRS
   push eax
   call puts
 
@@ -91,15 +86,13 @@ test_itoa:
 
 extern calibrate
 test_calibrate:
-  push word 0x0501
-  push word ATTRS
+  push dword 0x0501 << 16 | ATTRS
   push calibratestr
   call puts
 
   call calibrate
 
-  push word 0x0501
-  push word ATTRS
+  push dword 0x0501 << 16 | ATTRS
   push caliblankstr
   call puts
 
@@ -122,8 +115,7 @@ test_scan:
   push eax
   call itoa
 
-  push word 0x0501
-  push word ATTRS
+  push dword 0x0501 << 16 | ATTRS
   push eax
   call puts
 
@@ -139,8 +131,7 @@ test_rtcs:
   push eax
   call itoa
 
-  push word 0x0701
-  push word ATTRS
+  push dword 0x0701 << 16 | ATTRS
   push eax
   call puts
 
@@ -155,8 +146,7 @@ test_tps:
   push dword [tpms]
   call itoa
 
-  push word 0x0801
-  push word ATTRS
+  push dword 0x0801 << 16 | ATTRS
   push eax
   call puts
 
@@ -178,8 +168,7 @@ test_interval:
     push dword [itimer + 4]
     call itoa
 
-    push word 0x0901
-    push word ATTRS
+    push dword 0x0901 << 16 | ATTRS
     push eax
     call puts
 
@@ -188,8 +177,7 @@ test_interval:
     push dword [itimer]
     call itoa
 
-    push word 0x0909
-    push word ATTRS
+    push dword 0x0909 << 16 | ATTRS
     push eax
     call puts
 
@@ -198,8 +186,7 @@ test_interval:
     push dword [marquee]
     call itoa
 
-    push word 0x0912
-    push word ATTRS
+    push dword 0x0912 << 16 | ATTRS
     push eax
     call puts
 
@@ -212,8 +199,7 @@ test_delay:
   push dword [dtimer + 4]
   call itoa
 
-  push word 0x0A01
-  push word ATTRS
+  push dword 0x0A01 << 16 | ATTRS
   push eax
   call puts
 
@@ -222,8 +208,7 @@ test_delay:
   push dword [dtimer]
   call itoa
 
-  push word 0x0A09
-  push word ATTRS
+  push dword 0x0A09 << 16 | ATTRS
   push eax
   call puts
 
@@ -240,8 +225,7 @@ test_delay:
   jnz .clear
 
   ; Show delay display.
-  push word 0x0A12
-  push word ATTRS
+  push dword 0x0A12 << 16 | ATTRS
   push delaystr
   call puts
   add esp, 8
@@ -249,8 +233,7 @@ test_delay:
 
   .clear:
     ; Clear delay display.
-    push word 0x0A12
-    push word ATTRS
+    push dword 0x0A12 << 16 | ATTRS
     push blankstr
     call puts
 
@@ -288,8 +271,7 @@ test_rand:
     push dword [random]
     call itoa
 
-    push word 0x0C01
-    push word ATTRS
+    push dword 0x0C01 << 16 | ATTRS
     push eax
     call puts
 
@@ -311,8 +293,7 @@ test_shuffle:
   add esp, 8
 
   .render:
-    push word 0x0D01
-    push word ATTRS
+    push dword 0x0D01 << 16 | ATTRS
     push array
     call puts
     add esp, 8
