@@ -32,6 +32,8 @@ sbytes db 'ABCDE', 0
 swords dw 0xAAAA, 0xBBBB, 0xCCCC, 0xDDDD, 0xEEEE
 stimer dd 0, 0
 
+bag_current dw 0
+
 section .text
 
 global tests
@@ -328,7 +330,6 @@ test_shuffle:
     mov esi, swords
     mov edi, 0x0D07 << 16 | ATTRS
     mov ecx, 5
-
     .loop:
       push ecx
 
@@ -349,6 +350,50 @@ test_shuffle:
 
       pop ecx
       loop .loop
+
+extern bag
+extern bag_pop
+test_bag:
+  cmp byte [key], 0x19
+  jne .render
+
+  call bag_pop
+  mov word [bag_current], ax
+
+  .render:
+  push word 0x1003
+  push word 0
+  push word [bag_current]
+  call itoa
+
+  push dword 0x0F01 << 16 | ATTRS
+  push eax
+  call puts
+
+  add esp, 14
+
+  mov esi, bag
+  mov edi, 0x0F07 << 16 | ATTRS
+  mov ecx, 7
+  .loop:
+    push ecx
+
+    push word 0x1003
+    push word 0
+    push word [esi]
+    call itoa
+
+    push edi
+    push eax
+    call puts
+
+    add esp, 14
+
+    add esi, 2
+    add edi, 0x000040000
+
+    pop ecx
+    loop .loop
 
 jmp test_loop
 
