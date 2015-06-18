@@ -28,7 +28,8 @@ blankstr db '     ', 0
 random dd 0
 rtimer dd 0, 0
 
-array db 'ABCDE', 0
+sbytes db 'ABCDE', 0
+swords dw 0xAAAA, 0xBBBB, 0xCCCC, 0xDDDD, 0xEEEE
 stimer dd 0, 0
 
 section .text
@@ -297,7 +298,8 @@ test_rand:
 
     add esp, 14
 
-extern shuffle
+extern shuffleb
+extern shufflew
 test_shuffle:
   push dword 1000
   push stimer
@@ -308,15 +310,45 @@ test_shuffle:
   jz .render
 
   push dword 5
-  push array
-  call shuffle
+  push sbytes
+  call shuffleb
+  add esp, 8
+
+  push dword 5
+  push swords
+  call shufflew
   add esp, 8
 
   .render:
     push dword 0x0D01 << 16 | ATTRS
-    push array
+    push sbytes
     call puts
     add esp, 8
+
+    mov esi, swords
+    mov edi, 0x0D07 << 16 | ATTRS
+    mov ecx, 5
+
+    .loop:
+      push ecx
+
+      push word 0x1004
+      movzx eax, word [esi]
+      push eax
+      call itoa
+
+      push edi
+      push eax
+      call puts
+
+      add esp, 14
+
+      ; Move to next word in array and 5 columns over.
+      add esi, 2
+      add edi, 0x00050000
+
+      pop ecx
+      loop .loop
 
 jmp test_loop
 
