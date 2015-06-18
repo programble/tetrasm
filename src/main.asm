@@ -1,6 +1,9 @@
+%include "video.mac"
+
 section .text
 
 extern tests
+extern game
 
 global main
 main:
@@ -15,6 +18,8 @@ main:
 %ifdef TEST
   jmp tests
 %endif
+
+  jmp game
 
   hlt
   jmp main
