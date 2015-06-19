@@ -44,18 +44,16 @@ puts:
   mov esi, [ebp + 8] ; string
 
   ; Set up attributes for each character.
-  mov dx, [ebp + 12] ; attributes
+  mov ax, [ebp + 12] ; attributes
 
+  ; Load each character, then write each character with attributes.
   .loop:
-    cmp byte [esi], 0
+    lodsb
+    cmp al, 0
     je .ret
 
-    ; Write character with attributes.
-    mov dl, byte [esi]
-    mov [edi], dx
+    stosw
 
-    inc esi
-    add edi, 2
     jmp .loop
 
   .ret:
@@ -74,17 +72,14 @@ clear:
   push edi
 
   ; Double up char and attrs.
-  movzx edx, word [ebp + 8] ; char, attrs
-  mov eax, edx
-  shl edx, 16
-  or edx, eax
+  movzx eax, word [ebp + 8] ; char, attrs
+  mov edx, eax
+  shl eax, 16
+  or eax, edx
 
   mov edi, VRAM
   mov ecx, COLS * ROWS / 2
-  .loop:
-    mov [edi], edx
-    add edi, 4
-    loop .loop
+  rep stosd
 
   pop edi
   mov esp, ebp
@@ -101,7 +96,7 @@ fill:
 
   vram_index 12
   lea edi, [VRAM + eax * 2]
-  mov dx, word [ebp + 8] ; char, attrs
+  mov ax, word [ebp + 8] ; char, attrs
 
   movzx ecx, byte [ebp + 11] ; height
   .yloop:
@@ -111,10 +106,7 @@ fill:
 
     ; Draw one row.
     movzx ecx, byte [ebp + 10] ; width
-    .xloop:
-      mov [edi], dx
-      add edi, 2
-      loop .xloop
+    rep stosw
 
     pop edi
     pop ecx
