@@ -2,8 +2,7 @@
 
 section .text
 
-extern tests
-extern game
+extern game, tests, halt
 
 global main
 main:
@@ -21,5 +20,4 @@ main:
 
   jmp game
 
-  hlt
-  jmp main
+  jmp halt

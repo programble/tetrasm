@@ -123,8 +123,7 @@ test_calibrate:
 
 test_loop:
 
-extern scan
-extern reset
+extern scan, reset
 test_scan:
   call scan
   mov byte [key], al
@@ -160,8 +159,7 @@ test_rtcs:
 
   add esp, 14
 
-extern tps
-extern tpms
+extern tps, tpms
 test_tps:
   call tps
 
@@ -300,8 +298,7 @@ test_rand:
 
     add esp, 14
 
-extern shuffleb
-extern shufflew
+extern shuffleb, shufflew
 test_shuffle:
   push dword 1000
   push stimer
@@ -351,9 +348,7 @@ test_shuffle:
       pop ecx
       loop .loop
 
-extern bag
-extern bag_init
-extern bag_pop
+extern bag, bag_init, bag_pop
 test_bag:
   .init:
     cmp byte [key], 0x17

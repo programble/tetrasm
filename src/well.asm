@@ -31,8 +31,7 @@ well:
 
 section .text
 
-extern fill
-extern draw
+extern fill, draw
 
 ; well_draw()
 ; Draw the well.
