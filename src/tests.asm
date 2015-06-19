@@ -352,13 +352,21 @@ test_shuffle:
       loop .loop
 
 extern bag
+extern bag_init
 extern bag_pop
 test_bag:
-  cmp byte [key], 0x19
-  jne .render
+  .init:
+    cmp byte [key], 0x17
+    jne .pop
 
-  call bag_pop
-  mov word [bag_current], ax
+    call bag_init
+
+  .pop:
+    cmp byte [key], 0x19
+    jne .render
+
+    call bag_pop
+    mov word [bag_current], ax
 
   .render:
   push word 0x1003

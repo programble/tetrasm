@@ -5,6 +5,7 @@ section .text
 extern clear
 extern about_draw
 extern calibrate
+extern bag_init
 extern well_draw
 
 global game
@@ -21,6 +22,9 @@ game:
   call clear
 
   add esp, 4
+
+  ; Initialize game state.
+  call bag_init
 
   call well_draw
 

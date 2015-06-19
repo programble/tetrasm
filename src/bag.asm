@@ -44,3 +44,17 @@ bag_pop:
 
   .ret:
     ret
+
+; bag_init()
+; Shuffle the bag until the first tetrimono is not S or Z.
+global bag_init
+bag_init:
+  .loop:
+    call bag_shuffle
+
+    cmp word [bag], 0x500
+    je .loop
+    cmp word [bag], 0x700
+    je .loop
+
+  ret
