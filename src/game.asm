@@ -5,6 +5,7 @@ section .text
 extern clear
 extern about_draw
 extern calibrate
+extern well_draw
 
 global game
 game:
@@ -20,6 +21,8 @@ game:
   call clear
 
   add esp, 4
+
+  call well_draw
 
   hlt
   jmp game
