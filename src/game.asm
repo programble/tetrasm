@@ -7,6 +7,7 @@ extern about_draw
 extern calibrate
 extern bag_init
 extern well_draw
+extern current_spawn, current_draw
 
 global game
 game:
@@ -25,8 +26,10 @@ game:
 
   ; Initialize game state.
   call bag_init
+  call current_spawn
 
   call well_draw
+  call current_draw
 
   hlt
   jmp game
