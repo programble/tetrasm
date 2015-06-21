@@ -1,16 +1,5 @@
 %include "video.mac"
-
-%define WELL_WIDTH 22
-%define WELL_HEIGHT 23
-
-%define WELL_X (COLS / 2 - WELL_WIDTH / 2)
-%define WELL_Y 0
-
-%define INSIDE_WIDTH WELL_WIDTH - 2
-%define INSIDE_HEIGHT WELL_HEIGHT - 3
-
-%define INSIDE_X WELL_X + 1
-%define INSIDE_Y WELL_Y + 2
+%include "well.mac"
 
 section .data
 
@@ -19,15 +8,19 @@ well:
   times WELL_WIDTH dw 0
   times WELL_WIDTH dw 0
 
-  ; Middle rows have a border on either side.
+  ; Middle rows have a thin border on either side.
 %rep INSIDE_HEIGHT
+  dw 0
   dw BG_GRAY
   times INSIDE_WIDTH dw 0
   dw BG_GRAY
+  dw 0
 %endrep
 
-  ; Bottom row is all border.
-  times WELL_WIDTH dw BG_GRAY
+  ; Bottom row completes the border.
+  dw 0
+  times INSIDE_WIDTH + 2 dw BG_GRAY
+  dw 0
 
 section .text
 

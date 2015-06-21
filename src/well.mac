@@ -1,0 +1,13 @@
+%include "video.mac"
+
+%define WELL_WIDTH 24
+%define WELL_HEIGHT 23
+
+%define WELL_X (COLS / 2 - WELL_WIDTH / 2)
+%define WELL_Y 0
+
+%define INSIDE_WIDTH WELL_WIDTH - 4
+%define INSIDE_HEIGHT WELL_HEIGHT - 3
+
+%define INSIDE_X WELL_X + 2
+%define INSIDE_Y WELL_Y + 2
