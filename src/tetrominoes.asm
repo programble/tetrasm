@@ -1,12 +1,13 @@
 %include "video.mac"
 
-%define R BG_RED
-%define A BG_GRAY
-%define M BG_MAGENTA
-%define B BG_BLUE
-%define G BG_GREEN
-%define Y BG_YELLOW
-%define C BG_CYAN
+%define o 0, 0
+%define R BG_RED, BG_RED
+%define A BG_GRAY, BG_GRAY
+%define M BG_MAGENTA, BG_MAGENTA
+%define B BG_BLUE, BG_BLUE
+%define G BG_GREEN, BG_GREEN
+%define Y BG_YELLOW, BG_YELLOW
+%define C BG_CYAN, BG_CYAN
 
 section .data
 
@@ -23,117 +24,141 @@ tetromino_null:
 
 global tetromino_I
 tetromino_I:
-%rep 2
-  dw 0,0,0,0,0,0,0,0
-  dw R,R,R,R,R,R,R,R
-  dw 0,0,0,0,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,o,o,o
+  dw R,R,R,R
+  dw o,o,o,o
+  dw o,o,o,o
 
-  dw 0,0,R,R,0,0,0,0
-  dw 0,0,R,R,0,0,0,0
-  dw 0,0,R,R,0,0,0,0
-  dw 0,0,R,R,0,0,0,0
-%endrep
+  dw o,o,R,o
+  dw o,o,R,o
+  dw o,o,R,o
+  dw o,o,R,o
+
+  dw o,o,o,o
+  dw o,o,o,o
+  dw R,R,R,R
+  dw o,o,o,o
+
+  dw o,R,o,o
+  dw o,R,o,o
+  dw o,R,o,o
+  dw o,R,o,o
 
 global tetromino_J
 tetromino_J:
-  dw A,A,0,0,0,0,0,0
-  dw A,A,A,A,A,A,0,0
-  dw 0,0,0,0,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw A,o,o,o
+  dw A,A,A,o
+  dw o,o,o,o
+  dw o,o,o,o
 
-  dw 0,0,A,A,A,A,0,0
-  dw 0,0,A,A,0,0,0,0
-  dw 0,0,A,A,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,A,A,o
+  dw o,A,o,o
+  dw o,A,o,o
+  dw o,o,o,o
 
-  dw 0,0,0,0,0,0,0,0
-  dw A,A,A,A,A,A,0,0
-  dw 0,0,0,0,A,A,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,o,o,o
+  dw A,A,A,o
+  dw o,o,A,o
+  dw o,o,o,o
 
-  dw 0,0,A,A,0,0,0,0
-  dw 0,0,A,A,0,0,0,0
-  dw A,A,A,A,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,A,o,o
+  dw o,A,o,o
+  dw A,A,o,o
+  dw o,o,o,o
 
 global tetromino_L
 tetromino_L:
-  dw 0,0,0,0,M,M,0,0
-  dw M,M,M,M,M,M,0,0
-  dw 0,0,0,0,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,o,M,o
+  dw M,M,M,o
+  dw o,o,o,o
+  dw o,o,o,o
 
-  dw 0,0,M,M,0,0,0,0
-  dw 0,0,M,M,0,0,0,0
-  dw 0,0,M,M,M,M,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,M,o,o
+  dw o,M,o,o
+  dw o,M,M,o
+  dw o,o,o,o
 
-  dw 0,0,0,0,0,0,0,0
-  dw M,M,M,M,M,M,0,0
-  dw M,M,0,0,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,o,o,o
+  dw M,M,M,o
+  dw M,o,o,o
+  dw o,o,o,o
 
-  dw M,M,M,M,0,0,0,0
-  dw 0,0,M,M,0,0,0,0
-  dw 0,0,M,M,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw M,M,o,o
+  dw o,M,o,o
+  dw o,M,o,o
+  dw o,o,o,o
 
 global tetromino_O
 tetromino_O:
 %rep 4
-  dw 0,0,0,0,0,0,0,0
-  dw 0,0,B,B,B,B,0,0
-  dw 0,0,B,B,B,B,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,B,B,o
+  dw o,B,B,o
+  dw o,o,o,o
+  dw o,o,o,o
 %endrep
 
 global tetromino_S
 tetromino_S:
-%rep 2
-  dw 0,0,0,0,0,0,0,0
-  dw 0,0,G,G,G,G,0,0
-  dw G,G,G,G,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,G,G,o
+  dw G,G,o,o
+  dw o,o,o,o
+  dw o,o,o,o
 
-  dw 0,0,G,G,0,0,0,0
-  dw 0,0,G,G,G,G,0,0
-  dw 0,0,0,0,G,G,0,0
-  dw 0,0,0,0,0,0,0,0
-%endrep
+  dw o,G,o,o
+  dw o,G,G,o
+  dw o,o,G,o
+  dw o,o,o,o
+
+  dw o,o,o,o
+  dw o,G,G,o
+  dw G,G,o,o
+  dw o,o,o,o
+
+  dw G,o,o,o
+  dw G,G,o,o
+  dw o,G,o,o
+  dw o,o,o,o
 
 global tetromino_T
 tetromino_T:
-  dw 0,0,Y,Y,0,0,0,0
-  dw Y,Y,Y,Y,Y,Y,0,0
-  dw 0,0,0,0,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,Y,o,o
+  dw Y,Y,Y,o
+  dw o,o,o,o
+  dw o,o,o,o
 
-  dw 0,0,Y,Y,0,0,0,0
-  dw 0,0,Y,Y,Y,Y,0,0
-  dw 0,0,Y,Y,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,Y,o,o
+  dw o,Y,Y,o
+  dw o,Y,o,o
+  dw o,o,o,o
 
-  dw 0,0,0,0,0,0,0,0
-  dw Y,Y,Y,Y,Y,Y,0,0
-  dw 0,0,Y,Y,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,o,o,o
+  dw Y,Y,Y,o
+  dw o,Y,o,o
+  dw o,o,o,o
 
-  dw 0,0,Y,Y,0,0,0,0
-  dw Y,Y,Y,Y,0,0,0,0
-  dw 0,0,Y,Y,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw o,Y,o,o
+  dw Y,Y,o,o
+  dw o,Y,o,o
+  dw o,o,o,o
 
 global tetromino_Z
 tetromino_Z:
-%rep 2
-  dw 0,0,0,0,0,0,0,0
-  dw C,C,C,C,0,0,0,0
-  dw 0,0,C,C,C,C,0,0
-  dw 0,0,0,0,0,0,0,0
+  dw C,C,o,o
+  dw o,C,C,o
+  dw o,o,o,o
+  dw o,o,o,o
 
-  dw 0,0,0,0,C,C,0,0
-  dw 0,0,C,C,C,C,0,0
-  dw 0,0,C,C,0,0,0,0
-  dw 0,0,0,0,0,0,0,0
-%endrep
+  dw o,o,C,o
+  dw o,C,C,o
+  dw o,C,o,o
+  dw o,o,o,o
+
+  dw o,o,o,o
+  dw C,C,o,o
+  dw o,C,C,o
+  dw o,o,o,o
+
+  dw o,C,o,o
+  dw C,C,o,o
+  dw C,o,o,o
+  dw o,o,o,o
