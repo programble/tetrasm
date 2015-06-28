@@ -42,13 +42,13 @@ current_left:
 
   .check:
     ; Check for collisions to the left.
-    dec byte [esp]
+    sub byte [esp], 2
     push word [current_offset]
     call well_collide
     jz .ret
 
     ; Update actual coordinates.
-    dec byte [current_coords]
+    sub byte [current_coords], 2
 
   .ret:
     add esp, 4
@@ -60,13 +60,13 @@ global current_right
 current_right:
   ; Check for collisions to the right.
   push word [current_coords]
-  inc byte [esp]
+  add byte [esp], 2
   push word [current_offset]
   call well_collide
   jz .ret
 
   ; Update actual coordinates.
-  inc byte [current_coords]
+  add byte [current_coords], 2
 
   .ret:
     add esp, 4
