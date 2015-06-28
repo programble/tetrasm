@@ -24,7 +24,73 @@ well:
 
 section .text
 
+extern tetrominoes
 extern fill, draw
+
+; well_collide(word offset, byte x, byte y)
+; Return 0 if tetromino at offset would collide at x, y.
+global well_collide
+well_collide:
+  push ebp
+  mov ebp, esp
+  push esi
+  push edi
+
+  ; Find x, y in well.
+  movzx eax, byte [ebp + 11] ; y
+  mov edx, WELL_WIDTH
+  mul edx
+  movzx edx, byte [ebp + 10] ; x
+  add eax, edx
+  lea edi, [well + eax * 2]
+
+  ; Load tetromino sprite.
+  movzx edx, word [ebp + 8] ; offset
+  lea esi, [tetrominoes + edx]
+
+  mov ecx, 4
+  .yloop:
+    push ecx
+    push edi
+
+    mov ecx, 8
+    .xloop:
+      cmp word [edi], 0
+      setne al
+      cmp word [esi], 0
+      setne ah
+      and al, ah
+      jnz .collision
+
+      add esi, 2
+      add edi, 2
+
+      loop .xloop
+
+    pop edi
+    pop ecx
+
+    ; Move a whole row down.
+    add edi, WELL_WIDTH * 2
+
+    loop .yloop
+
+  ; No collision found.
+  or al, 1
+  jmp .ret
+
+  .collision:
+    ; Discard yloop ecx, edi.
+    add esp, 8
+
+    xor eax, eax
+
+  .ret:
+    pop edi
+    pop esi
+    mov esp, ebp
+    pop ebp
+    ret
 
 ; well_draw()
 ; Draw the well.
