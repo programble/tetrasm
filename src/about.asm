@@ -1,25 +1,25 @@
 %include "video.mac"
 
-%define R FG_BRIGHT | FG_RED     | BG_RED
-%define A FG_BRIGHT | FG_GRAY    | BG_GRAY
-%define M FG_BRIGHT | FG_MAGENTA | BG_MAGENTA
-%define B FG_BRIGHT | FG_BLUE    | BG_BLUE
-%define G FG_BRIGHT | FG_GREEN   | BG_GREEN
-%define Y FG_BRIGHT | FG_YELLOW  | BG_YELLOW
 %define C FG_BRIGHT | FG_CYAN    | BG_CYAN
+%define B FG_BRIGHT | FG_BLUE    | BG_BLUE
+%define A FG_BRIGHT | FG_GRAY    | BG_GRAY
+%define Y FG_BRIGHT | FG_YELLOW  | BG_YELLOW
+%define G FG_BRIGHT | FG_GREEN   | BG_GREEN
+%define M FG_BRIGHT | FG_MAGENTA | BG_MAGENTA
+%define R FG_BRIGHT | FG_RED     | BG_RED
 
 section .data
 
 title:
-  dw R,R,R,A,A,A,M,M,M,B,B,B,G,G,G,Y,Y,Y,C,C,C
-  dw R, 'T' | R, R
-  dw A, 'E' | A, A
-  dw M, 'T' | M, M
-  dw B, 'R' | B, B
+  dw C,C,C,B,B,B,A,A,A,Y,Y,Y,G,G,G,M,M,M,R,R,R
+  dw C, 'T' | C, C
+  dw B, 'E' | B, B
+  dw A, 'T' | A, A
+  dw Y, 'R' | Y, Y
   dw G, 'A' | G, G
-  dw Y, 'S' | Y, Y
-  dw C, 'M' | C, C
-  dw R,R,R,A,A,A,M,M,M,B,B,B,G,G,G,Y,Y,Y,C,C,C
+  dw M, 'S' | M, M
+  dw R, 'M' | R, R
+  dw C,C,C,B,B,B,A,A,A,Y,Y,Y,G,G,G,M,M,M,R,R,R
 
 info db 'Tetrasm https://github.com/programble/tetrasm', 0
 
