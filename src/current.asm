@@ -90,6 +90,47 @@ current_down:
     add esp, 4
     ret
 
+; current_rotate()
+; Rotate the current tetromino, if possible. Returns result of well_collide.
+global current_rotate
+current_rotate:
+  push word [current_coords]
+  push word [current_offset]
+
+  ; Rotate by moving to the next sprite.
+  add word [esp], 64
+
+  ; Check if the next sprite is a different tetromino (256-byte offsets).
+  mov ax, [esp]
+  and ax, 0xFF
+  jnz .collide
+
+  ; Move back to the first rotation of the current tetromino.
+  sub word [esp], 256
+
+  .collide:
+    call well_collide
+    jnz .update
+
+    ; Wall kick right.
+    add byte [esp + 2], 2
+    call well_collide
+    jnz .update
+
+    ; Wall kick left.
+    sub byte [esp + 2], 4
+    call well_collide
+    jz .ret
+
+  ; Update actual coordinates and offset in one go.
+  .update:
+    mov edx, [esp]
+    mov [current_offset], edx
+
+  .ret:
+    add esp, 4
+    ret
+
 ; current_draw()
 ; Draw the current tetromino inside the well.
 global current_draw

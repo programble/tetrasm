@@ -8,7 +8,7 @@ extern about_draw
 extern calibrate
 extern bag_init
 extern well_draw
-extern current_spawn, current_left, current_right, current_down, current_draw
+extern current_spawn, current_left, current_right, current_down, current_rotate, current_draw
 extern scan
 extern reset
 
@@ -46,8 +46,13 @@ game:
       inc ebx
     .down:
       cmp byte [esp], KEY_DOWN
-      jne .reset
+      jne .up
       call current_down
+      inc ebx
+    .up:
+      cmp byte [esp], KEY_UP
+      jne .reset
+      call current_rotate
       inc ebx
     .reset:
       cmp byte [esp], KEY_R
