@@ -1,6 +1,7 @@
 %ifdef TEST
 
 %include "video.mac"
+%include "keyboard.mac"
 
 %define ATTRS FG_BRIGHT | FG_GRAY | BG_BLUE
 
@@ -130,7 +131,7 @@ test_scan:
   test al, al
   jz .skip
 
-  cmp al, 0x13 ; R
+  cmp al, KEY_R
   je reset
 
   push word 0x1002
@@ -261,7 +262,7 @@ test_delay:
     add esp, 8
 
   ; Start delay on key press.
-  cmp byte [key], 0x20 ; D
+  cmp byte [key], KEY_D
   jne .end
 
   push dword 2000
@@ -351,13 +352,13 @@ test_shuffle:
 extern bag, bag_init, bag_pop
 test_bag:
   .init:
-    cmp byte [key], 0x17
+    cmp byte [key], KEY_I
     jne .pop
 
     call bag_init
 
   .pop:
-    cmp byte [key], 0x19
+    cmp byte [key], KEY_P
     jne .render
 
     call bag_pop
