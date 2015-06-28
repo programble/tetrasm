@@ -30,6 +30,11 @@ extern fill, draw
 ; Draw the well.
 global well_draw
 well_draw:
+  ; Blank background at top of well.
+  push dword WELL_Y << 24 | WELL_X << 16 | 2 << 8 | WELL_WIDTH
+  push word ' ' | BG_BLACK
+  call fill
+
   ; Background fill inside well.
   push dword INSIDE_Y << 24 | INSIDE_X << 16 | INSIDE_HEIGHT << 8 | INSIDE_WIDTH
   push word ':' | FG_GRAY
@@ -40,6 +45,6 @@ well_draw:
   push well
   call draw
 
-  add esp, 14
+  add esp, 20
 
   ret
