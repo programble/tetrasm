@@ -3,72 +3,56 @@
 
 section .text
 
-extern clear
-extern about_draw
-extern calibrate
-extern bag_init
-extern well_draw
-extern current_spawn, current_left, current_right, current_down, current_rotate, current_draw
-extern scan
-extern reset
+extern clear, about_draw
+extern calibrate, scan, reset
+extern bag_init, current_spawn
+extern current_left, current_right, current_down, current_rotate
+extern ghost_update
+extern well_draw, current_draw, ghost_draw
 
 global game
 game:
   ; Show title while timing calibrates.
   push word BG_BLACK
   call clear
-
   call about_draw
-
   call calibrate
-
-  push word BG_BLACK
   call clear
-
-  add esp, 4
+  add esp, 2
 
   ; Initialize game state.
   call bag_init
   call current_spawn
 
-  .loop:
-    call scan
-    push ax
-    .left:
-      cmp byte [esp], KEY_LEFT
-      jne .right
-      call current_left
-      inc ebx
-    .right:
-      cmp byte [esp], KEY_RIGHT
-      jne .down
-      call current_right
-      inc ebx
-    .down:
-      cmp byte [esp], KEY_DOWN
-      jne .up
-      call current_down
-      inc ebx
-    .up:
-      cmp byte [esp], KEY_UP
-      jne .reset
-      call current_rotate
-      inc ebx
-    .reset:
-      cmp byte [esp], KEY_R
-      jne .end
-      jmp reset
+  ; Game loop tracks if state has changed in ebx for redrawing.
+  mov ebx, 1
 
-    .end:
-      add esp, 2
+%macro bind 2
+  cmp byte [esp], %1
+  jne %%next
+  call %2
+  add ebx, eax
+  %%next:
+%endmacro
 
-    .draw:
-      test ebx, ebx
-      jz .continue
+game_loop:
+  call scan
+  push ax
+  bind KEY_R,     reset
+  bind KEY_LEFT,  current_left
+  bind KEY_RIGHT, current_right
+  bind KEY_DOWN,  current_down
+  bind KEY_UP,    current_rotate
+  add esp, 2
 
-      call well_draw
-      call current_draw
+  test ebx, ebx
+  jz game_loop
 
-    .continue:
-      xor ebx, ebx
-      jmp .loop
+  call ghost_update
+
+  call well_draw
+  call ghost_draw
+  call current_draw
+
+  xor ebx, ebx
+  jmp game_loop
