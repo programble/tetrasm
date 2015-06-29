@@ -1,13 +1,14 @@
 %include "video.mac"
 
+; Use colons in sprites to make ghost rendering easier.
 %define o 0, 0
-%define C BG_CYAN, BG_CYAN
-%define B BG_BLUE, BG_BLUE
-%define A BG_GRAY, BG_GRAY
-%define Y BG_YELLOW, BG_YELLOW
-%define G BG_GREEN, BG_GREEN
-%define M BG_MAGENTA, BG_MAGENTA
-%define R BG_RED, BG_RED
+%define C ':' | FG_CYAN    | BG_CYAN,    ':' | FG_CYAN    | BG_CYAN
+%define B ':' | FG_BLUE    | BG_BLUE,    ':' | FG_BLUE    | BG_BLUE
+%define A ':' | FG_GRAY    | BG_GRAY,    ':' | FG_GRAY    | BG_GRAY
+%define Y ':' | FG_YELLOW  | BG_YELLOW,  ':' | FG_YELLOW  | BG_YELLOW
+%define G ':' | FG_GREEN   | BG_GREEN,   ':' | FG_GREEN   | BG_GREEN
+%define M ':' | FG_MAGENTA | BG_MAGENTA, ':' | FG_MAGENTA | BG_MAGENTA
+%define R ':' | FG_RED     | BG_RED,     ':' | FG_RED     | BG_RED
 
 section .data
 
