@@ -6,7 +6,7 @@ section .text
 extern clear, about_draw
 extern calibrate, scan, reset
 extern bag_init, current_spawn
-extern current_left, current_right, current_down, current_rotate
+extern current_left, current_right, current_down, current_rotate, current_drop
 extern ghost_update
 extern well_draw, current_draw, ghost_draw
 
@@ -43,6 +43,7 @@ game_loop:
   bind KEY_RIGHT, current_right
   bind KEY_DOWN,  current_down
   bind KEY_UP,    current_rotate
+  bind KEY_ENTER, current_drop
   add esp, 2
 
   test ebx, ebx

@@ -7,6 +7,7 @@ extern current_offset, current_coords
 
 ghost_sprite times 64 db 0
 
+global ghost_coords
 ghost_coords dw 0
 
 section .text

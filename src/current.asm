@@ -2,6 +2,8 @@
 
 section .data
 
+extern ghost_coords
+
 global current_offset
 current_offset dw 0
 
@@ -14,7 +16,7 @@ section .text
 
 extern tetrominoes
 extern bag_pop
-extern well_collide
+extern well_collide, well_lock
 extern draw
 
 ; current_spawn()
@@ -24,6 +26,19 @@ current_spawn:
   call bag_pop
   mov [current_offset], ax
   mov word [current_coords], WELL_WIDTH / 2 - 4
+  ret
+
+; current_lock()
+; Lock the current tetromino in the well and spawn another.
+global current_lock
+current_lock:
+  ; Push coordinates and offset.
+  push dword [current_offset]
+  call well_lock
+  add esp, 4
+
+  call current_spawn
+
   ret
 
 ; current_left()
@@ -130,6 +145,15 @@ current_rotate:
   .ret:
     add esp, 4
     ret
+
+; current_drop()
+; Hard drop the current tetromino to where its ghost is.
+global current_drop
+current_drop:
+  mov ax, [ghost_coords]
+  mov [current_coords], ax
+  call current_lock
+  ret
 
 ; current_draw()
 ; Draw the current tetromino inside the well.
