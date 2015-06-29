@@ -4,9 +4,12 @@
 section .data
 
 well:
-  ; First two rows are empty.
-  times WELL_WIDTH dw 0
-  times WELL_WIDTH dw 0
+  ; First two rows have invisible walls.
+%rep 2
+  times 4 dw ' '
+  times INSIDE_WIDTH dw 0
+  times 4 dw ' '
+%endrep
 
   ; Middle rows have a thin border on either side.
 %rep INSIDE_HEIGHT
