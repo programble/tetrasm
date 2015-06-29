@@ -19,19 +19,19 @@ caliblankstr db '              ', 0
 
 key db 0
 
-itimer dd 0, 0
+itimer dq 0
 marquee dd 1
 
-dtimer dd 0, 0
+dtimer dq 0
 delaystr db 'DELAY', 0
 blankstr db '     ', 0
 
 random dd 0
-rtimer dd 0, 0
+rtimer dq 0
 
 sbytes db 'ABCDE', 0
 swords dw 0xAAAA, 0xBBBB, 0xCCCC, 0xDDDD, 0xEEEE
-stimer dd 0, 0
+stimer dq 0
 
 bag_current dw 0
 

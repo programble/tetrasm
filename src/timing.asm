@@ -1,7 +1,7 @@
 section .data
 
-; Qword previous tick count.
-ptsc dd 0, 0
+; Previous tick count.
+ptsc dq 0
 
 ; Previous RTC second for tps.
 psec db 0xFF
