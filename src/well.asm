@@ -158,7 +158,7 @@ well_draw:
 
   ; Background fill inside well.
   push dword INSIDE_Y << 24 | INSIDE_X << 16 | INSIDE_HEIGHT << 8 | INSIDE_WIDTH
-  push word ':' | FG_GRAY
+  push word ':' | FG_BRIGHT | FG_BLACK
   call fill
 
   ; The well itself.
