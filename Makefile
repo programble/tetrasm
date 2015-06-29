@@ -1,4 +1,4 @@
-BUILD = debug,test
+BUILD = debug
 
 # Build
 
