@@ -90,6 +90,63 @@ well_collide:
     pop ebp
     ret
 
+; well_lock(word offset, byte x, byte y)
+; Lock tetromino offset at x, y.
+global well_lock
+well_lock:
+  push ebp
+  mov ebp, esp
+  push esi
+  push edi
+
+  ; Find x, y in well.
+  movzx eax, byte [ebp + 11] ; y
+  mov edx, WELL_WIDTH
+  mul edx
+  movzx edx, byte [ebp + 10] ; x
+  add eax, edx
+  lea edi, [well + eax * 2]
+
+  ; Load tetromino sprite.
+  movzx edx, word [ebp + 8] ; offset
+  lea esi, [tetrominoes + edx]
+
+  mov ecx, 4
+  .yloop:
+    push ecx
+    push edi
+
+    ; Copy a row into the well, skipping null words.
+    mov ecx, 8
+    .xloop:
+      lodsw
+      test ax, ax
+      jz .null
+
+      stosw
+      loop .xloop
+      jmp .break
+
+      .null:
+        add edi, 2
+        loop .xloop
+
+      .break:
+
+    pop edi
+    pop ecx
+
+    ; Move a whole row down.
+    add edi, WELL_WIDTH * 2
+
+    loop .yloop
+
+  pop edi
+  pop esi
+  mov esp, ebp
+  pop ebp
+  ret
+
 ; well_draw()
 ; Draw the well.
 global well_draw
