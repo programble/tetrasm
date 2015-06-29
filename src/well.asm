@@ -10,17 +10,15 @@ well:
 
   ; Middle rows have a thin border on either side.
 %rep INSIDE_HEIGHT
-  dw 0
-  dw BG_GRAY
+  dw 0, 0, 0, BG_GRAY
   times INSIDE_WIDTH dw 0
-  dw BG_GRAY
-  dw 0
+  dw BG_GRAY, 0, 0, 0
 %endrep
 
   ; Bottom row completes the border.
-  dw 0
+  dw 0, 0, 0
   times INSIDE_WIDTH + 2 dw BG_GRAY
-  dw 0
+  dw 0, 0, 0
 
 section .text
 

@@ -1,13 +1,13 @@
 %include "video.mac"
 
-%define WELL_WIDTH 24
-%define WELL_HEIGHT 23
+%define INSIDE_WIDTH 20
+%define INSIDE_HEIGHT 20
+
+%define WELL_WIDTH (INSIDE_WIDTH + 8)
+%define WELL_HEIGHT (INSIDE_HEIGHT + 3)
 
 %define WELL_X (COLS / 2 - WELL_WIDTH / 2)
 %define WELL_Y 0
 
-%define INSIDE_WIDTH WELL_WIDTH - 4
-%define INSIDE_HEIGHT WELL_HEIGHT - 3
-
-%define INSIDE_X WELL_X + 2
-%define INSIDE_Y WELL_Y + 2
+%define INSIDE_X (WELL_X + 4)
+%define INSIDE_Y (WELL_Y + 2)
