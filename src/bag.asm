@@ -1,10 +1,10 @@
 section .data
 
 ; Shuffled bag of tetromino offsets.
-global bag
 bag dw 0x100, 0x200, 0x300, 0x400, 0x500, 0x600, 0x700
 
 ; Pointer to next tetromino in bag.
+global bag_next
 bag_next dd bag
 
 section .text

@@ -8,7 +8,7 @@ extern calibrate, scan, reset
 extern bag_init, current_spawn
 extern current_left, current_right, current_down, current_rotate, current_drop
 extern ghost_update
-extern well_draw, current_draw, ghost_draw
+extern well_draw, current_draw, ghost_draw, preview_draw
 
 global game
 game:
@@ -54,6 +54,7 @@ game_loop:
   call well_draw
   call ghost_draw
   call current_draw
+  call preview_draw
 
   xor ebx, ebx
   jmp game_loop
