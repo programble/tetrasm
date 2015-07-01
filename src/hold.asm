@@ -1,58 +1,58 @@
 %include "video.mac"
 %include "well.mac"
 
-%define HOLD_X (COLS / 4 - 6)
-%define HOLD_Y 3
+%define hold.X (COLS / 4 - 6)
+%define hold.Y 3
 
 section .data
 
-extern current_offset, current_coords
+extern current.offset, current.coords
 
-hold_offset dw 0
+hold.offset dw 0
 
 ; Whether hold is available. Reset on spawn.
-global hold_available
-hold_available db 1
+global hold.available?
+hold.available? db 1
 
 section .text
 
 extern tetrominoes
-extern bag_pop
+extern bag.pop
 extern fill, draw
 
 ; hold()
 ; Swap the current tetromino with the hold tetromino.
 global hold
 hold:
-  test byte [hold_available], 1
+  test byte [hold.available?], 1
   jz .ret
 
   ; Check if there is no hold tetromino yet.
-  mov ax, [hold_offset]
+  mov ax, [hold.offset]
   test ax, ax
   jnz .swap
 
-  call bag_pop
+  call bag.pop
 
   .swap:
-    xchg ax, [current_offset]
-    mov [hold_offset], ax
+    xchg ax, [current.offset]
+    mov [hold.offset], ax
 
   ; Respawn tetromino.
   ; FIXME: Repeated formula.
-  mov word [current_coords], WELL_WIDTH / 2 - 4
+  mov word [current.coords], well.WIDTH / 2 - 4
 
-  and byte [hold_available], 0
+  and byte [hold.available?], 0
 
   .ret:
     ret
 
-; hold_draw()
+; hold.draw()
 ; Draw the hold tetromino.
-global hold_draw
-hold_draw:
+global hold.draw
+hold.draw:
   ; Clear previous hold tetromino.
-  push dword HOLD_Y << 24 | HOLD_X << 16 | 0x0408
+  push dword hold.Y << 24 | hold.X << 16 | 0x0408
   push word 0
   call fill
 
@@ -60,7 +60,7 @@ hold_draw:
   add esp, 2
 
   ; Find sprite for hold tetromino.
-  movzx eax, word [hold_offset]
+  movzx eax, word [hold.offset]
   add eax, tetrominoes
 
   push eax

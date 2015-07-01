@@ -3,16 +3,16 @@
 %include "video.mac"
 %include "keyboard.mac"
 
-%define ATTRS FG_BRIGHT | FG_GRAY | BG_BLUE
+%define ATTRS FG.BRIGHT | FG.GRAY | BG.BLUE
 
 section .data
 
 hello db 'Hello, World!', 0
 
 sprite:
-  dw BG_GREEN,   BG_GREEN,   0, BG_CYAN,   BG_CYAN,   0, BG_RED,  BG_RED
+  dw BG.GREEN,   BG.GREEN,   0, BG.CYAN,   BG.CYAN,   0, BG.RED,  BG.RED
   dw 0,          0,          0, 0,         0,         0, 0,       0
-  dw BG_MAGENTA, BG_MAGENTA, 0, BG_YELLOW, BG_YELLOW, 0, BG_GRAY, BG_GRAY
+  dw BG.MAGENTA, BG.MAGENTA, 0, BG.YELLOW, BG.YELLOW, 0, BG.GRAY, BG.GRAY
 
 calibratestr db 'Calibrating...', 0
 caliblankstr db '              ', 0
@@ -33,7 +33,7 @@ sbytes db 'ABCDE', 0
 swords dw 0xAAAA, 0xBBBB, 0xCCCC, 0xDDDD, 0xEEEE
 stimer dq 0
 
-bag_current dw 0
+bag.current dw 0
 
 section .text
 
@@ -41,40 +41,40 @@ global tests
 tests:
 
 extern clear
-test_clear:
-  push BG_BLUE
+test.clear:
+  push BG.BLUE
   call clear
   add esp, 2
 
 extern putc
-test_putc:
+test.putc:
   push dword 0x0101 << 16 | 'H' | ATTRS
   call putc
   add esp, 4
 
 extern puts
-test_puts:
+test.puts:
   push dword 0x0201 << 16 | ATTRS
   push hello
   call puts
   add esp, 8
 
 extern fill
-test_fill:
+test.fill:
   push dword 0x01250306
-  push word BG_GRAY
+  push word BG.GRAY
   call fill
   add esp, 6
 
 extern draw
-test_draw:
+test.draw:
   push dword 0x01380308
   push sprite
   call draw
   add esp, 8
 
 extern itoa
-test_itoa:
+test.itoa:
   ; Binary
   push word 0x0208
   push dword 42
@@ -109,7 +109,7 @@ test_itoa:
   add esp, 14
 
 extern calibrate
-test_calibrate:
+test.calibrate:
   push dword 0x0501 << 16 | ATTRS
   push calibratestr
   call puts
@@ -122,16 +122,16 @@ test_calibrate:
 
   add esp, 16
 
-test_loop:
+test.loop:
 
 extern scan, reset
-test_scan:
+test.scan:
   call scan
   mov byte [key], al
   test al, al
   jz .skip
 
-  cmp al, KEY_R
+  cmp al, KEY.R
   je reset
 
   push word 0x1002
@@ -147,7 +147,7 @@ test_scan:
   .skip:
 
 extern rtcs
-test_rtcs:
+test.rtcs:
   call rtcs
 
   push word 0x1002
@@ -161,7 +161,7 @@ test_rtcs:
   add esp, 14
 
 extern tps, tpms
-test_tps:
+test.tps:
   call tps
 
   push word 0x0A0A
@@ -175,7 +175,7 @@ test_tps:
   add esp, 14
 
 extern interval
-test_interval:
+test.interval:
   push dword 500
   push itimer
   call interval
@@ -215,7 +215,7 @@ test_interval:
   add esp, 50
 
 extern delay
-test_delay:
+test.delay:
   ; High bits of dtimer
   push word 0x1008
   push dword [dtimer + 4]
@@ -262,7 +262,7 @@ test_delay:
     add esp, 8
 
   ; Start delay on key press.
-  cmp byte [key], KEY_D
+  cmp byte [key], KEY.D
   jne .end
 
   push dword 2000
@@ -273,7 +273,7 @@ test_delay:
   .end:
 
 extern rand
-test_rand:
+test.rand:
   push dword 1000
   push rtimer
   call interval
@@ -300,7 +300,7 @@ test_rand:
     add esp, 14
 
 extern shuffleb, shufflew
-test_shuffle:
+test.shuffle:
   push dword 1000
   push stimer
   call interval
@@ -349,25 +349,25 @@ test_shuffle:
       pop ecx
       loop .loop
 
-extern bag, bag_init, bag_pop
-test_bag:
+extern bag, bag.init, bag.pop
+test.bag:
   .init:
-    cmp byte [key], KEY_I
+    cmp byte [key], KEY.I
     jne .pop
 
-    call bag_init
+    call bag.init
 
   .pop:
-    cmp byte [key], KEY_P
+    cmp byte [key], KEY.P
     jne .render
 
-    call bag_pop
-    mov word [bag_current], ax
+    call bag.pop
+    mov word [bag.current], ax
 
   .render:
   push word 0x1003
   push word 0
-  push word [bag_current]
+  push word [bag.current]
   call itoa
 
   push dword 0x0F01 << 16 | ATTRS
@@ -399,6 +399,6 @@ test_bag:
     pop ecx
     loop .loop
 
-jmp test_loop
+jmp test.loop
 
 %endif

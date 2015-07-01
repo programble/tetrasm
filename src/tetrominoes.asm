@@ -2,13 +2,13 @@
 
 ; Use colons in sprites to make ghost rendering easier.
 %define o 0, 0
-%define C ':' | FG_CYAN    | BG_CYAN,    ':' | FG_CYAN    | BG_CYAN
-%define B ':' | FG_BLUE    | BG_BLUE,    ':' | FG_BLUE    | BG_BLUE
-%define A ':' | FG_GRAY    | BG_GRAY,    ':' | FG_GRAY    | BG_GRAY
-%define Y ':' | FG_YELLOW  | BG_YELLOW,  ':' | FG_YELLOW  | BG_YELLOW
-%define G ':' | FG_GREEN   | BG_GREEN,   ':' | FG_GREEN   | BG_GREEN
-%define M ':' | FG_MAGENTA | BG_MAGENTA, ':' | FG_MAGENTA | BG_MAGENTA
-%define R ':' | FG_RED     | BG_RED,     ':' | FG_RED     | BG_RED
+%define C ':' | FG.CYAN    | BG.CYAN,    ':' | FG.CYAN    | BG.CYAN
+%define B ':' | FG.BLUE    | BG.BLUE,    ':' | FG.BLUE    | BG.BLUE
+%define A ':' | FG.GRAY    | BG.GRAY,    ':' | FG.GRAY    | BG.GRAY
+%define Y ':' | FG.YELLOW  | BG.YELLOW,  ':' | FG.YELLOW  | BG.YELLOW
+%define G ':' | FG.GREEN   | BG.GREEN,   ':' | FG.GREEN   | BG.GREEN
+%define M ':' | FG.MAGENTA | BG.MAGENTA, ':' | FG.MAGENTA | BG.MAGENTA
+%define R ':' | FG.RED     | BG.RED,     ':' | FG.RED     | BG.RED
 
 section .data
 
@@ -19,12 +19,10 @@ section .data
 global tetrominoes
 tetrominoes:
 
-global tetromino_null
-tetromino_null:
+.null:
   times 128 dw 0
 
-global tetromino_I
-tetromino_I:
+.I:
   dw o,o,o,o
   dw C,C,C,C
   dw o,o,o,o
@@ -45,8 +43,7 @@ tetromino_I:
   dw o,C,o,o
   dw o,C,o,o
 
-global tetromino_J
-tetromino_J:
+.J:
   dw B,o,o,o
   dw B,B,B,o
   dw o,o,o,o
@@ -67,8 +64,7 @@ tetromino_J:
   dw B,B,o,o
   dw o,o,o,o
 
-global tetromino_L
-tetromino_L:
+.L:
   dw o,o,A,o
   dw A,A,A,o
   dw o,o,o,o
@@ -89,8 +85,7 @@ tetromino_L:
   dw o,A,o,o
   dw o,o,o,o
 
-global tetromino_O
-tetromino_O:
+.O:
 %rep 4
   dw o,Y,Y,o
   dw o,Y,Y,o
@@ -98,8 +93,7 @@ tetromino_O:
   dw o,o,o,o
 %endrep
 
-global tetromino_S
-tetromino_S:
+.S:
   dw o,G,G,o
   dw G,G,o,o
   dw o,o,o,o
@@ -120,8 +114,7 @@ tetromino_S:
   dw o,G,o,o
   dw o,o,o,o
 
-global tetromino_T
-tetromino_T:
+.T:
   dw o,M,o,o
   dw M,M,M,o
   dw o,o,o,o
@@ -142,8 +135,7 @@ tetromino_T:
   dw o,M,o,o
   dw o,o,o,o
 
-global tetromino_Z
-tetromino_Z:
+.Z:
   dw R,R,o,o
   dw o,R,R,o
   dw o,o,o,o

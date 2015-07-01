@@ -7,20 +7,20 @@ well:
   ; First two rows have invisible walls.
 %rep 2
   times 4 dw ' '
-  times INSIDE_WIDTH dw 0
+  times well.INSIDE.WIDTH dw 0
   times 4 dw ' '
 %endrep
 
   ; Middle rows have a thin border on either side.
-%rep INSIDE_HEIGHT
-  dw 0, 0, 0, BG_GRAY
-  times INSIDE_WIDTH dw 0
-  dw BG_GRAY, 0, 0, 0
+%rep well.INSIDE.HEIGHT
+  dw 0, 0, 0, BG.GRAY
+  times well.INSIDE.WIDTH dw 0
+  dw BG.GRAY, 0, 0, 0
 %endrep
 
   ; Bottom row completes the border.
   dw 0, 0, 0
-  times INSIDE_WIDTH + 2 dw BG_GRAY
+  times well.INSIDE.WIDTH + 2 dw BG.GRAY
   dw 0, 0, 0
 
 section .text
@@ -28,10 +28,10 @@ section .text
 extern tetrominoes
 extern fill, draw
 
-; well_collide(word offset, byte x, byte y)
+; well.collide?(word offset, byte x, byte y)
 ; Return 0 if tetromino at offset would collide at x, y.
-global well_collide
-well_collide:
+global well.collide?
+well.collide?:
   push ebp
   mov ebp, esp
   push esi
@@ -39,7 +39,7 @@ well_collide:
 
   ; Find x, y in well.
   movzx eax, byte [ebp + 11] ; y
-  mov edx, WELL_WIDTH
+  mov edx, well.WIDTH
   mul edx
   movzx edx, byte [ebp + 10] ; x
   add eax, edx
@@ -72,7 +72,7 @@ well_collide:
     pop ecx
 
     ; Move a whole row down.
-    add edi, WELL_WIDTH * 2
+    add edi, well.WIDTH * 2
 
     loop .yloop
 
@@ -93,10 +93,10 @@ well_collide:
     pop ebp
     ret
 
-; well_lock(word offset, byte x, byte y)
+; well.lock(word offset, byte x, byte y)
 ; Lock tetromino offset at x, y.
-global well_lock
-well_lock:
+global well.lock
+well.lock:
   push ebp
   mov ebp, esp
   push esi
@@ -104,7 +104,7 @@ well_lock:
 
   ; Find x, y in well.
   movzx eax, byte [ebp + 11] ; y
-  mov edx, WELL_WIDTH
+  mov edx, well.WIDTH
   mul edx
   movzx edx, byte [ebp + 10] ; x
   add eax, edx
@@ -140,7 +140,7 @@ well_lock:
     pop ecx
 
     ; Move a whole row down.
-    add edi, WELL_WIDTH * 2
+    add edi, well.WIDTH * 2
 
     loop .yloop
 
@@ -150,22 +150,23 @@ well_lock:
   pop ebp
   ret
 
-; well_draw()
+; well.draw()
 ; Draw the well.
-global well_draw
-well_draw:
+global well.draw
+well.draw:
   ; Blank background at top of well.
-  push dword WELL_Y << 24 | WELL_X << 16 | 2 << 8 | WELL_WIDTH
-  push word ' ' | BG_BLACK
+  push dword well.Y << 24 | well.X << 16 | 2 << 8 | well.WIDTH
+  push word ' ' | BG.BLACK
   call fill
 
   ; Background fill inside well.
-  push dword INSIDE_Y << 24 | INSIDE_X << 16 | INSIDE_HEIGHT << 8 | INSIDE_WIDTH
-  push word ':' | FG_BRIGHT | FG_BLACK
+  push dword well.INSIDE.Y << 24 | well.INSIDE.X << 16 | \
+             well.INSIDE.HEIGHT << 8 | well.INSIDE.WIDTH
+  push word ':' | FG.BRIGHT | FG.BLACK
   call fill
 
   ; The well itself.
-  push dword WELL_Y << 24 | WELL_X << 16 | WELL_HEIGHT << 8 | WELL_WIDTH
+  push dword well.Y << 24 | well.X << 16 | well.HEIGHT << 8 | well.WIDTH
   push well
   call draw
 

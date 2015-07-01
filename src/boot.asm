@@ -1,8 +1,8 @@
-STACK_SIZE equ 0x100
+%define stack.SIZE 0x100
 
 section .bss
 
-stack resb STACK_SIZE
+stack resb stack.SIZE
 
 section .text
 
@@ -11,7 +11,7 @@ extern main
 ; Set up esp and ebp stack pointers and jump to main.
 global boot
 boot:
-  mov esp, stack + STACK_SIZE
+  mov esp, stack + stack.SIZE
   mov ebp, esp
   jmp main
 

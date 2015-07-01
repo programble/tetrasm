@@ -1,12 +1,12 @@
 %include "video.mac"
 
-%define C FG_BRIGHT | FG_CYAN    | BG_CYAN
-%define B FG_BRIGHT | FG_BLUE    | BG_BLUE
-%define A FG_BRIGHT | FG_GRAY    | BG_GRAY
-%define Y FG_BRIGHT | FG_YELLOW  | BG_YELLOW
-%define G FG_BRIGHT | FG_GREEN   | BG_GREEN
-%define M FG_BRIGHT | FG_MAGENTA | BG_MAGENTA
-%define R FG_BRIGHT | FG_RED     | BG_RED
+%define C FG.BRIGHT | FG.CYAN    | BG.CYAN
+%define B FG.BRIGHT | FG.BLUE    | BG.BLUE
+%define A FG.BRIGHT | FG.GRAY    | BG.GRAY
+%define Y FG.BRIGHT | FG.YELLOW  | BG.YELLOW
+%define G FG.BRIGHT | FG.GREEN   | BG.GREEN
+%define M FG.BRIGHT | FG.MAGENTA | BG.MAGENTA
+%define R FG.BRIGHT | FG.RED     | BG.RED
 
 section .data
 
@@ -27,11 +27,11 @@ section .text
 
 extern draw, puts
 
-; about_draw()
+; about.draw()
 ; Draw title and info.
-global about_draw
-about_draw:
-  push dword (ROWS - 1) << 24 | FG_BRIGHT | FG_GRAY
+global about.draw
+about.draw:
+  push dword (ROWS - 1) << 24 | FG.BRIGHT | FG.GRAY
   push info
   call puts
 

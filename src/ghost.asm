@@ -3,48 +3,47 @@
 section .data
 
 extern tetrominoes
-extern current_offset, current_coords
+extern current.offset, current.coords
 
-ghost_sprite times 64 db 0
+ghost.sprite times 64 db 0
 
-global ghost_coords
-ghost_coords dw 0
+global ghost.coords
+ghost.coords dw 0
 
 section .text
 
-extern well_collide
+extern well.collide?
 extern draw
 
-; ghost_update()
+; ghost.update()
 ; Update the ghost sprite and coords from the current tetromino.
-global ghost_update
-ghost_update:
+global ghost.update
+ghost.update:
   push esi
   push edi
 
   ; Copy current tetromino sprite into ghost sprite.
-  movzx esi, word [current_offset]
+  movzx esi, word [current.offset]
   add esi, tetrominoes
-  mov edi, ghost_sprite
+  mov edi, ghost.sprite
   mov ecx, 16
   rep movsd
 
-  ; Remove background color and add bright to ghost sprite.
-  mov edi, ghost_sprite
+  ; Remove background color from ghost sprite.
+  mov edi, ghost.sprite
   mov ecx, 16
   .sloop:
     and dword [edi], 0x0FFF0FFF
-    ;or dword [edi], FG_BRIGHT << 16 | FG_BRIGHT
     add edi, 4
     loop .sloop
 
   ; Start at current tetromino coords.
-  push word [current_coords]
-  push word [current_offset]
+  push word [current.coords]
+  push word [current.offset]
 
   ; Move down until there is a collision.
   .cloop:
-    call well_collide
+    call well.collide?
     jz .update
 
     inc byte [esp + 3]
@@ -54,24 +53,24 @@ ghost_update:
   .update:
     mov ax, [esp + 2]
     dec ah
-    mov [ghost_coords], ax
+    mov [ghost.coords], ax
 
   add esp, 4
   pop edi
   pop esi
   ret
 
-; ghost_draw()
+; ghost.draw()
 ; Draw the ghost.
-global ghost_draw
-ghost_draw:
+global ghost.draw
+ghost.draw:
   ; Offset coordinates into the well and add dimensions for draw.
-  movzx eax, word [ghost_coords]
+  movzx eax, word [ghost.coords]
   shl eax, 16
-  add eax, WELL_Y << 24 | WELL_X << 16 | 0x0408
+  add eax, well.Y << 24 | well.X << 16 | 0x0408
 
   push eax
-  push ghost_sprite
+  push ghost.sprite
   call draw
 
   add esp, 8
