@@ -3,6 +3,7 @@
 section .data
 
 extern ghost_coords
+extern hold_available
 
 global current_offset
 current_offset dw 0
@@ -26,6 +27,7 @@ current_spawn:
   call bag_pop
   mov [current_offset], ax
   mov word [current_coords], WELL_WIDTH / 2 - 4
+  or byte [hold_available], 1
   ret
 
 ; current_lock()
