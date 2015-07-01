@@ -10,8 +10,8 @@ current.offset dw 0
 
 global current.coords
 current.coords:
-.x db 0
-.y db 0
+  .x db 0
+  .y db 0
 
 section .text
 
@@ -103,6 +103,8 @@ current.down:
   ; Update actual coordinates.
   inc byte [current.coords + 1]
 
+  ; TODO: Increase score.
+
   .ret:
     add esp, 4
     ret
@@ -154,6 +156,9 @@ current.drop:
   mov ax, [ghost.coords]
   mov [current.coords], ax
   call current.lock
+
+  ; TODO: Increase score.
+
   ret
 
 ; current.draw()
