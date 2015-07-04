@@ -19,6 +19,7 @@ extern tetrominoes
 extern bag.pop
 extern well.collide?, well.lock
 extern score.down, score.drop
+extern gravity.lock.reset
 extern draw
 
 ; current.spawn()
@@ -68,6 +69,8 @@ current.left:
     ; Update actual coordinates.
     sub byte [current.coords], 2
 
+    call gravity.lock.reset
+
   .ret:
     add esp, 4
     ret
@@ -85,6 +88,8 @@ current.right:
 
   ; Update actual coordinates.
   add byte [current.coords], 2
+
+  call gravity.lock.reset
 
   .ret:
     add esp, 4
@@ -106,6 +111,20 @@ current.down:
 
   call score.down
 
+  .ret:
+    add esp, 4
+    ret
+
+; current.fall()
+; Move the current tetromino down, if possible, without increasing score.
+global current.fall
+current.fall:
+  push word [current.coords]
+  inc byte [esp + 1]
+  push word [current.offset]
+  call well.collide?
+  jz .ret
+  inc byte [current.coords + 1]
   .ret:
     add esp, 4
     ret
@@ -145,6 +164,8 @@ current.rotate:
   .update:
     mov edx, [esp]
     mov [current.offset], edx
+
+    call gravity.lock.reset
 
   .ret:
     add esp, 4

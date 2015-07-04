@@ -9,6 +9,7 @@ extern bag.init, current.spawn
 extern current.left, current.right, current.down, current.rotate, current.drop
 extern ghost.update
 extern hold
+extern gravity.fall, gravity.lock
 extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw, score.draw
 
 global game
@@ -47,6 +48,12 @@ game.loop:
   bind KEY.ENTER, current.drop
   bind KEY.SHIFT, hold
   add esp, 2
+
+  call gravity.lock
+  add ebx, eax
+
+  call gravity.fall
+  add ebx, eax
 
   test ebx, ebx
   jz game.loop
