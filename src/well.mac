@@ -3,11 +3,16 @@
 %define well.INSIDE.WIDTH 20
 %define well.INSIDE.HEIGHT 20
 
-%define well.WIDTH (well.INSIDE.WIDTH + 8)
-%define well.HEIGHT (well.INSIDE.HEIGHT + 3)
+%define well.PAD.LEFT 4
+%define well.PAD.RIGHT 4
+%define well.PAD.TOP 2
+%define well.PAD.BOTTOM 1
+
+%define well.WIDTH (well.INSIDE.WIDTH + well.PAD.LEFT + well.PAD.RIGHT)
+%define well.HEIGHT (well.INSIDE.HEIGHT + well.PAD.TOP + well.PAD.BOTTOM)
 
 %define well.X (COLS / 2 - well.WIDTH / 2)
 %define well.Y 0
 
-%define well.INSIDE.X (well.X + 4)
-%define well.INSIDE.Y (well.Y + 2)
+%define well.INSIDE.X (well.X + well.PAD.LEFT)
+%define well.INSIDE.Y (well.Y + well.PAD.TOP)

@@ -5,23 +5,25 @@ section .data
 
 well:
   ; First two rows have invisible walls.
-%rep 2
-  times 4 dw ' '
+%rep well.PAD.TOP
+  times well.PAD.LEFT dw ' '
   times well.INSIDE.WIDTH dw 0
-  times 4 dw ' '
+  times well.PAD.RIGHT dw ' '
 %endrep
 
   ; Middle rows have a thin border on either side.
 %rep well.INSIDE.HEIGHT
-  dw 0, 0, 0, BG.GRAY
+  times well.PAD.LEFT - 1 dw 0
+  dw BG.GRAY
   times well.INSIDE.WIDTH dw 0
-  dw BG.GRAY, 0, 0, 0
+  dw BG.GRAY
+  times well.PAD.RIGHT - 1 dw 0
 %endrep
 
   ; Bottom row completes the border.
-  dw 0, 0, 0
+  times well.PAD.LEFT - 1 dw 0
   times well.INSIDE.WIDTH + 2 dw BG.GRAY
-  dw 0, 0, 0
+  times well.PAD.RIGHT - 1 dw 0
 
 section .text
 
