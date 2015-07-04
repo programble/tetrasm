@@ -9,7 +9,7 @@ extern bag.init, current.spawn
 extern current.left, current.right, current.down, current.rotate, current.drop
 extern ghost.update
 extern hold
-extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw
+extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw, score.draw
 
 global game
 game:
@@ -58,6 +58,7 @@ game.loop:
   call current.draw
   call preview.draw
   call hold.draw
+  call score.draw
 
   xor ebx, ebx
   jmp game.loop

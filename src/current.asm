@@ -18,6 +18,7 @@ section .text
 extern tetrominoes
 extern bag.pop
 extern well.collide?, well.lock
+extern score.down, score.drop
 extern draw
 
 ; current.spawn()
@@ -103,7 +104,7 @@ current.down:
   ; Update actual coordinates.
   inc byte [current.coords + 1]
 
-  ; TODO: Increase score.
+  call score.down
 
   .ret:
     add esp, 4
@@ -153,11 +154,11 @@ current.rotate:
 ; Hard drop the current tetromino to where its ghost is.
 global current.drop
 current.drop:
+  call score.drop
+
   mov ax, [ghost.coords]
   mov [current.coords], ax
   call current.lock
-
-  ; TODO: Increase score.
 
   ret
 
