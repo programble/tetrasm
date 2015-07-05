@@ -25,6 +25,7 @@ level.label db 'LEVEL', 0
 
 section .text
 
+extern gravity.update
 extern itoa
 extern puts
 
@@ -104,7 +105,7 @@ score.lines:
   ; Level up!
   inc dword [level]
   mov dword [level.lines], 0
-  ; TODO: Re-calculate gravity speed.
+  call gravity.update
 
   .ret:
     mov esp, ebp

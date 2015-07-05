@@ -5,6 +5,10 @@ section .data
 
 extern current.coords, current.offset
 
+p007 dq 0.007
+p8 dq 0.8
+d1000 dq 1000.0
+
 ; Millisecond interval at which to apply gravity.
 gravity.interval dd 1000
 
@@ -20,6 +24,7 @@ section .text
 extern interval, delay
 extern current.fall, current.lock
 extern well.collide?
+extern level
 
 ; gravity.fall()
 ; Apply gravity to falling tetromino.
@@ -36,6 +41,40 @@ gravity.fall:
 
   .ret:
     ret
+
+; gravity.update()
+; Update gravity interval based on current level.
+global gravity.update
+gravity.update:
+  ; (0.8 - (level - 1) * 0.007) ^ (level - 1) * 1000
+
+  ; a = level - 1
+  push dword [level]
+  dec dword [esp]
+
+  ; b = a * 0.007
+  fild dword [esp]
+  fmul qword [p007]
+
+  ; c = 0.8 - b
+  fsubr qword [p8]
+
+  ; d = c ^ a
+  fild dword [esp]
+  fxch
+  fyl2x
+  f2xm1
+  fld1
+  faddp
+
+  ; e = d * 1000
+  fmul qword [d1000]
+
+  fistp dword [esp]
+  pop eax
+  mov [gravity.interval], eax
+
+  ret
 
 ; gravity.lock()
 ; Apply lock delay. Returns non-zero on update.
