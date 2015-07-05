@@ -1,6 +1,8 @@
 %include "video.mac"
 %include "well.mac"
 
+%define well.lines.DELAY 100
+
 section .data
 
 well:
@@ -29,10 +31,13 @@ well:
 well.lines dd 0, 0, 0, 0
 well.lines$ dd 0
 
+well.lines.timer dq 0
+
 section .text
 
 extern tetrominoes
 extern score.lines
+extern delay
 extern fill, draw
 
 ; well.collide?(word offset, byte x, byte y)
@@ -164,11 +169,15 @@ well.lines.detect:
   push esi
   push edi
 
-  ; Start at first inside-well row.
-  mov esi, well + (well.PAD.TOP * well.WIDTH + well.PAD.LEFT) * 2
-
   ; Write cleared rows into array.
   mov edi, well.lines
+
+  ; Return if line clears already detected.
+  cmp dword [edi], 0
+  jne .ret
+
+  ; Start at first inside-well row.
+  mov esi, well + (well.PAD.TOP * well.WIDTH + well.PAD.LEFT) * 2
 
   mov ecx, well.INSIDE.HEIGHT
   .yloop:
@@ -227,10 +236,24 @@ well.lines.clear:
   push edi
 
   mov esi, well.lines
+
+  ; Return 0 if there are no lines to clear.
+  xor eax, eax
+  cmp dword [esi], 0
+  je .ret
+
+  ; Wait for animation delay to elapse.
+  push dword well.lines.DELAY
+  push well.lines.timer
+  call delay
+  add esp, 8
+  test eax, eax
+  jz .ret
+
   .lloop:
     lodsd
     test eax, eax
-    jz .ret
+    jz .reset
 
     ; Copy previous row to current row.
     push esi
@@ -258,6 +281,14 @@ well.lines.clear:
   .break:
     pop esi
     jmp .lloop
+
+  ; Zero array of detected line clears and return non-zero.
+  .reset:
+    mov dword [well.lines], 0
+    mov dword [well.lines + 4], 0
+    mov dword [well.lines + 8], 0
+    mov dword [well.lines + 12], 0
+    inc eax
 
   .ret:
     pop edi
