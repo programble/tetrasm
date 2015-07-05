@@ -228,6 +228,52 @@ well.lines.detect:
     pop esi
     ret
 
+; well.lines.animate()
+; "Animate" lines about to be cleared.
+global well.lines.animate
+well.lines.animate:
+  push esi
+  push edi
+
+  mov esi, well.lines
+
+  ; Return zero if nothing to animate.
+  xor eax, eax
+  cmp dword [esi], 0
+  je .ret
+
+  .lloop:
+    lodsd
+    test eax, eax
+    jz .done
+    mov edi, eax
+
+    ; Return zero if already "animated".
+    xor eax, eax
+    mov dl, [edi]
+    cmp dl, '*'
+    je .ret
+
+    ; Change colons to asterisks and set bright attribute two cells at a time.
+    ; 0x3A ':' ^ 0x10 = 0x2A '*'
+    mov ecx, well.INSIDE.WIDTH / 2
+    .xloop:
+      mov eax, [edi]
+      xor eax, FG.BRIGHT << 16 | 0x10 << 16 | FG.BRIGHT | 0x10
+      stosd
+      loop .xloop
+
+    jmp .lloop
+
+  ; Return non-zero.
+  .done:
+    inc eax
+
+  .ret:
+    pop edi
+    pop esi
+    ret
+
 ; well.lines.clear()
 ; Clear detected lines and move everything down.
 global well.lines.clear

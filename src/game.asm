@@ -10,7 +10,7 @@ extern current.left, current.right, current.down, current.rotate, current.drop
 extern ghost.update
 extern hold
 extern gravity.fall, gravity.lock
-extern well.lines.detect, well.lines.clear
+extern well.lines.detect, well.lines.animate, well.lines.clear
 extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw, score.draw
 
 global game
@@ -39,38 +39,47 @@ game:
 %endmacro
 
 game.loop:
-  call scan
-  push ax
-  bind KEY.R,     reset
-  bind KEY.LEFT,  current.left
-  bind KEY.RIGHT, current.right
-  bind KEY.DOWN,  current.down
-  bind KEY.UP,    current.rotate
-  bind KEY.ENTER, current.drop
-  bind KEY.SHIFT, hold
-  add esp, 2
+  .input:
+    call scan
+    push ax
 
-  call gravity.lock
-  add ebx, eax
+    bind KEY.R,     reset
+    bind KEY.LEFT,  current.left
+    bind KEY.RIGHT, current.right
+    bind KEY.DOWN,  current.down
+    bind KEY.UP,    current.rotate
+    bind KEY.ENTER, current.drop
+    bind KEY.SHIFT, hold
 
-  call gravity.fall
-  add ebx, eax
+    add esp, 2
 
-  call well.lines.detect
-  call well.lines.clear
-  add ebx, eax
+  .update:
+    call gravity.lock
+    add ebx, eax
 
-  test ebx, ebx
-  jz game.loop
+    call gravity.fall
+    add ebx, eax
 
-  call ghost.update
+    call well.lines.detect
 
-  call well.draw
-  call ghost.draw
-  call current.draw
-  call preview.draw
-  call hold.draw
-  call score.draw
+    call well.lines.animate
+    add ebx, eax
+
+    call well.lines.clear
+    add ebx, eax
+
+  .draw:
+    test ebx, ebx
+    jz game.loop
+
+    call ghost.update
+
+    call well.draw
+    call ghost.draw
+    call current.draw
+    call preview.draw
+    call hold.draw
+    call score.draw
 
   xor ebx, ebx
   jmp game.loop
