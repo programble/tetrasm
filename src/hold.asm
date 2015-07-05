@@ -36,6 +36,8 @@ hold:
 
   .swap:
     xchg ax, [current.offset]
+    ; Round down to default rotation.
+    and ax, 0xFF00
     mov [hold.offset], ax
 
   ; Respawn tetromino.
