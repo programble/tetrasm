@@ -10,6 +10,7 @@ extern current.left, current.right, current.down, current.rotate, current.drop
 extern ghost.update
 extern hold
 extern gravity.fall, gravity.lock
+extern well.lines.detect, well.lines.clear
 extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw, score.draw
 
 global game
@@ -53,6 +54,10 @@ game.loop:
   add ebx, eax
 
   call gravity.fall
+  add ebx, eax
+
+  call well.lines.detect
+  call well.lines.clear
   add ebx, eax
 
   test ebx, ebx

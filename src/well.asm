@@ -25,9 +25,14 @@ well:
   times well.INSIDE.WIDTH + 2 dw BG.GRAY
   times well.PAD.RIGHT - 1 dw 0
 
+; Array of up to four memory locations of lines to clear.
+well.lines dd 0, 0, 0, 0
+well.lines$ dd 0
+
 section .text
 
 extern tetrominoes
+extern score.lines
 extern fill, draw
 
 ; well.collide?(word offset, byte x, byte y)
@@ -151,6 +156,113 @@ well.lock:
   mov esp, ebp
   pop ebp
   ret
+
+; well.lines.detect()
+; Detect line clears and populate well.lines.
+global well.lines.detect
+well.lines.detect:
+  push esi
+  push edi
+
+  ; Start at first inside-well row.
+  mov esi, well + (well.PAD.TOP * well.WIDTH + well.PAD.LEFT) * 2
+
+  ; Write cleared rows into array.
+  mov edi, well.lines
+
+  mov ecx, well.INSIDE.HEIGHT
+  .yloop:
+    push ecx
+    push esi
+
+    ; Check double words at a time.
+    mov ecx, well.INSIDE.WIDTH / 2
+    .xloop:
+      lodsd
+      test eax, eax
+      jz .continue
+      loop .xloop
+
+    ; Entire row was non-zero, add its memory location to the list.
+    mov eax, [esp]
+    stosd
+
+  .continue:
+    pop esi
+    pop ecx
+
+    ; Move down a row.
+    add esi, well.WIDTH * 2
+
+    loop .yloop
+
+  ; Calculate number of lines detected and increase score.
+  mov eax, edi
+  sub eax, well.lines
+  shr eax, 2
+  jz .zero
+  push eax
+  call score.lines
+  add esp, 4
+
+  ; Zero the rest of the lines array.
+  .zero:
+    xor eax, eax
+  .zloop:
+    cmp edi, well.lines$
+    je .ret
+    stosd
+    jmp .zloop
+
+  .ret:
+    pop edi
+    pop esi
+    ret
+
+; well.lines.clear()
+; Clear detected lines and move everything down.
+global well.lines.clear
+well.lines.clear:
+  push esi
+  push edi
+
+  mov esi, well.lines
+  .lloop:
+    lodsd
+    test eax, eax
+    jz .ret
+
+    ; Copy previous row to current row.
+    push esi
+    mov edi, eax
+    sub eax, well.WIDTH * 2
+    mov esi, eax
+
+    .yloop:
+      cmp esi, well + well.PAD.LEFT * 2
+      je .break
+
+      push esi
+      push edi
+      mov ecx, well.INSIDE.WIDTH / 2
+      rep movsd
+      pop edi
+      pop esi
+
+      ; Move one row up.
+      sub esi, well.WIDTH * 2
+      sub edi, well.WIDTH * 2
+
+      jmp .yloop
+
+  .break:
+    pop esi
+    jmp .lloop
+
+  .ret:
+    pop edi
+    pop esi
+    ret
 
 ; well.draw()
 ; Draw the well.

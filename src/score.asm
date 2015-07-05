@@ -14,6 +14,12 @@ global level, score
 level dd 1
 score dd 0
 
+; Score factors for number of lines cleared.
+score.factors dd 100, 300, 500, 800
+
+; Lines remaining to be cleared before next level.
+level.lines dd 10
+
 score.label db 'SCORE', 0
 level.label db 'LEVEL', 0
 
@@ -75,3 +81,31 @@ score.draw:
 
   add esp, 22
   ret
+
+; score.lines(dword lines)
+; Award points for lines cleared.
+global score.lines
+score.lines:
+  push ebp
+  mov ebp, esp
+
+  ; Index into score factors.
+  mov ecx, [esp + 8] ; lines
+  mov eax, [score.factors + ecx * 4 - 4]
+
+  ; Increase score by factor * level.
+  mul dword [level]
+  add [score], eax
+
+  sub [level.lines], ecx
+  jnz .ret
+
+  ; Level up!
+  inc dword [level]
+  mov dword [level.lines], 10
+  ; TODO: Re-calculate gravity speed.
+
+  .ret:
+    mov esp, ebp
+    pop ebp
+    ret
