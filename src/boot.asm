@@ -8,11 +8,12 @@ section .text
 
 extern main
 
-; Set up esp and ebp stack pointers and jump to main.
+; Set up stack pointers, initialize the FPU and jump to main.
 global boot
 boot:
   mov esp, stack + stack.SIZE
   mov ebp, esp
+  fninit
   jmp main
 
 ; Divide by zero to cause a triple fault and reset.
