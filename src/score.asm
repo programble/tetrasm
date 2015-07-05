@@ -17,8 +17,8 @@ score dd 0
 ; Score factors for number of lines cleared.
 score.factors dd 100, 300, 500, 800
 
-; Lines remaining to be cleared before next level.
-level.lines dd 10
+; Lines cleared in the current level.
+level.lines dd 0
 
 score.label db 'SCORE', 0
 level.label db 'LEVEL', 0
@@ -97,12 +97,13 @@ score.lines:
   mul dword [level]
   add [score], eax
 
-  sub [level.lines], ecx
-  jnz .ret
+  add [level.lines], ecx
+  cmp dword [level.lines], 10
+  jb .ret
 
   ; Level up!
   inc dword [level]
-  mov dword [level.lines], 10
+  mov dword [level.lines], 0
   ; TODO: Re-calculate gravity speed.
 
   .ret:
