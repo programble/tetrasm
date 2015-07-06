@@ -155,3 +155,58 @@ gravity.lock.reset:
 
   .ret:
     ret
+
+%ifdef DEBUG
+%include "debug.mac"
+
+extern itoa, puts
+
+global gravity.debug
+gravity.debug:
+  push word 0x0A0A
+  push dword [gravity.interval]
+  call itoa
+  push dword debug.Y << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1008
+  push dword [gravity.timer + 4]
+  call itoa
+  push dword (debug.Y + 1) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  push word 0x1008
+  push dword [gravity.timer]
+  call itoa
+  push dword (debug.Y + 1) << 24 | (debug.X + 8) << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 28
+
+  push word 0x1008
+  push dword [gravity.lock.timer + 4]
+  call itoa
+  push dword (debug.Y + 2) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  push word 0x1008
+  push dword [gravity.lock.timer]
+  call itoa
+  push dword (debug.Y + 2) << 24 | (debug.X + 8) << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 28
+
+  push word 0x0A03
+  push dword [gravity.lock.counter]
+  call itoa
+  push dword (debug.Y + 3) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  ret
+
+%endif
