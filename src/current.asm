@@ -202,3 +202,56 @@ current.draw:
   add esp, 8
 
   ret
+
+%ifdef DEBUG
+%include "debug.mac"
+
+extern hold.offset
+
+extern itoa, puts
+
+global current.debug
+current.debug:
+  push word 0x1003
+  push dword [current.offset]
+  call itoa
+  push dword debug.Y << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1004
+  push dword [current.coords]
+  call itoa
+  push dword (debug.Y + 1) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1004
+  push dword [ghost.coords]
+  call itoa
+  push dword (debug.Y + 2) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1003
+  push dword [hold.offset]
+  call itoa
+  push dword (debug.Y + 3) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x0201
+  push dword [hold.available?]
+  call itoa
+  push dword (debug.Y + 4) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  ret
+
+%endif

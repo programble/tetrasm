@@ -8,6 +8,7 @@ section .data
 
 extern current.offset, current.coords
 
+global hold.offset
 hold.offset dw 0
 
 ; Whether hold is available. Reset on spawn.
