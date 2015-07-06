@@ -1,6 +1,9 @@
 ; Lock delay in milliseconds.
 %define gravity.lock.DELAY 500
 
+; Number of moves before lock.
+%define gravity.lock.COUNT 15
+
 section .data
 
 extern current.coords, current.offset
@@ -18,7 +21,7 @@ gravity.timer dq 0
 gravity.lock.timer dq 0
 
 ; Lock delay movement counter.
-gravity.lock.counter db 15
+gravity.lock.counter db gravity.lock.COUNT
 
 section .text
 
@@ -100,7 +103,7 @@ gravity.lock:
   jz .check
   mov dword [gravity.lock.timer], 0
   mov dword [gravity.lock.timer + 4], 0
-  mov byte [gravity.lock.counter], 15
+  mov byte [gravity.lock.counter], gravity.lock.COUNT
   jmp .ret
 
   ; If lock delay in progress and can't move down, check if expired and lock.
@@ -122,6 +125,7 @@ gravity.lock:
 
   .lock:
     call current.lock
+    mov byte [gravity.lock.counter], gravity.lock.COUNT
     pop ebx
     ret
 
