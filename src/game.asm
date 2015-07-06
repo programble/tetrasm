@@ -15,7 +15,7 @@ game.paused.label db 'PAUSED', 0
 section .text
 
 extern clear, puts, about.draw
-extern calibrate, scan, reset
+extern calibrate, tps, scan, reset
 extern bag.init, current.spawn
 extern current.left, current.right, current.down, current.rotate, current.drop
 extern ghost.update
@@ -97,6 +97,9 @@ game:
 %endmacro
 
 game.loop:
+  .timing:
+    call tps
+
   .input:
     call scan
     push ax

@@ -10,7 +10,7 @@ section .bss
 
 ; Number of CPU ticks per millisecond.
 global tpms
-tpms resw 1
+tpms resd 1
 
 section .text
 
