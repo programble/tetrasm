@@ -364,3 +364,60 @@ well.draw:
   add esp, 20
 
   ret
+
+%ifdef DEBUG
+%include "debug.mac"
+
+extern itoa, puts
+
+global well.debug
+well.debug:
+  push word 0x1008
+  push dword [well.lines]
+  call itoa
+  push dword debug.Y << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1008
+  push dword [well.lines + 4]
+  call itoa
+  push dword (debug.Y + 1) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1008
+  push dword [well.lines + 8]
+  call itoa
+  push dword (debug.Y + 2) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1008
+  push dword [well.lines + 12]
+  call itoa
+  push dword (debug.Y + 3) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  push word 0x1008
+  push dword [well.lines.timer + 4]
+  call itoa
+  push dword (debug.Y + 4) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  push word 0x1008
+  push dword [well.lines.timer]
+  call itoa
+  push dword (debug.Y + 4) << 24 | (debug.X + 8) << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 28
+
+  ret
+
+%endif

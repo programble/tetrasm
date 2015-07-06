@@ -6,6 +6,7 @@
 section .data
 
 extern keyboard.debug, timing.debug, bag.debug, current.debug, gravity.debug
+extern well.debug
 
 debug.functions:
   dd 0
@@ -14,6 +15,7 @@ debug.functions:
   dd bag.debug
   dd current.debug
   dd gravity.debug
+  dd well.debug
 debug.functions$:
 
 debug.function dd debug.functions
