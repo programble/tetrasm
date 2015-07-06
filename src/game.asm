@@ -24,6 +24,10 @@ extern gravity.fall, gravity.lock
 extern well.lines.detect, well.lines.animate, well.lines.clear
 extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw, score.draw
 
+%ifdef DEBUG
+extern debug.cycle, debug.draw
+%endif
+
 ; game.pause()
 ; Toggle the paused state.
 game.pause:
@@ -104,6 +108,10 @@ game.loop:
     call scan
     push ax
 
+%ifdef DEBUG
+    bind KEY.D,     debug.cycle
+%endif
+
     bind KEY.R,     reset
     bind KEY.P,     game.pause
 
@@ -129,6 +137,10 @@ game.loop:
     call.update well.lines.clear
 
   .draw:
+%ifdef DEBUG
+    call debug.draw
+%endif
+
     test ebx, ebx
     jz game.loop
 

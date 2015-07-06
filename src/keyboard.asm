@@ -28,3 +28,21 @@ scan:
 
   .ret:
     ret
+
+%ifdef DEBUG
+%include "debug.mac"
+
+extern itoa, puts
+
+global keyboard.debug
+keyboard.debug:
+  push word 0x1002
+  push dword [key]
+  call itoa
+  push dword debug.Y << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+  ret
+
+%endif
