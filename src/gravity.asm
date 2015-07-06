@@ -13,6 +13,7 @@ d1000 dq 1000.0
 gravity.interval dd 1000
 
 ; Gravity and lock delay timers.
+global gravity.timer
 gravity.timer dq 0
 gravity.lock.timer dq 0
 
