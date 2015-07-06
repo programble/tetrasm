@@ -5,12 +5,13 @@
 
 section .data
 
-extern keyboard.debug, timing.debug
+extern keyboard.debug, timing.debug, bag.debug
 
 debug.functions:
   dd 0
   dd keyboard.debug
   dd timing.debug
+  dd bag.debug
 debug.functions$:
 
 debug.function dd debug.functions

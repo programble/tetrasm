@@ -59,3 +59,48 @@ bag.init:
     je .loop
 
   ret
+
+%ifdef DEBUG
+%include "debug.mac"
+
+extern itoa, puts
+
+global bag.debug
+bag.debug:
+  push ebx
+  push edi
+
+  mov ebx, bag
+  mov edi, debug.Y << 24 | debug.X << 16 | debug.ATTRS
+  mov ecx, 7
+  .loop:
+    push ecx
+
+    push word 0x1003
+    push dword [ebx]
+    call itoa
+    push edi
+    push eax
+    call puts
+    add esp, 14
+
+    add ebx, 2
+    add edi, 4 << 16
+
+    pop ecx
+    loop .loop
+
+  push word 0x1003
+  mov eax, [bag.next]
+  push dword [eax]
+  call itoa
+  push dword (debug.Y + 1) << 24 | debug.X << 16 | debug.ATTRS
+  push eax
+  call puts
+  add esp, 14
+
+  pop edi
+  pop ebx
+  ret
+
+%endif

@@ -3,7 +3,7 @@
 %define debug.X 0
 %define debug.Y (ROWS / 2)
 
-%define debug.WIDTH 20
+%define debug.WIDTH 29
 %define debug.HEIGHT 10
 
 %define debug.ATTRS FG.GREEN
