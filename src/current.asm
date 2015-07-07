@@ -4,6 +4,7 @@ section .data
 
 extern ghost.coords
 extern hold.available?
+extern game.over
 
 global current.offset
 current.offset dw 0
@@ -40,6 +41,10 @@ current.lock:
   push dword [current.offset]
   call well.lock
   add esp, 4
+
+  ; Lock out game over condition.
+  test word [current.coords], 0xFF00
+  setz byte [game.over]
 
   call current.spawn
 
