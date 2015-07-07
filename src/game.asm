@@ -1,16 +1,19 @@
 %include "video.mac"
 %include "keyboard.mac"
 
-%define game.STATUS.X (COLS * 3 / 4 + 2)
-%define game.STATUS.Y (ROWS / 4)
+%define game.STATUS.X (COLS * 3 / 4)
+%define game.STATUS.Y (ROWS / 4 + 2)
 
 section .data
 
 extern gravity.timer
 
+global game.over
 game.paused db 0
+game.over db 0
 
 game.paused.label db 'PAUSED', 0
+game.over.label db 'GAME OVER', 0
 
 section .text
 
@@ -55,12 +58,26 @@ game.paused.draw:
   push word BG.BLACK
   call clear
 
-  push dword game.STATUS.Y << 24 | game.STATUS.X << 16 | FG.BRIGHT | FG.YELLOW
+  push dword game.STATUS.Y << 24 | (game.STATUS.X + 2) << 16 | FG.BRIGHT | FG.YELLOW
   push game.paused.label
   call puts
   add esp, 10
 
   call about.draw
+
+  .ret:
+    ret
+
+; game.over.draw()
+; Draw the game over status.
+game.over.draw:
+  test byte [game.over], 1
+  jz .ret
+
+  push dword game.STATUS.Y << 24 | game.STATUS.X << 16 | FG.BRIGHT | FG.RED
+  push game.over.label
+  call puts
+  add esp, 8
 
   .ret:
     ret
@@ -81,11 +98,6 @@ game:
 
   ; Game loop tracks if state has changed in ebx for redrawing.
   mov ebx, 1
-
-%macro j.paused? 1
-  test byte [game.paused], 1
-  jnz %1
-%endmacro
 
 %macro bind 2
   cmp byte [esp], %1
@@ -113,9 +125,14 @@ game.loop:
 %endif
 
     bind KEY.R,     reset
+
+    test byte [game.over], 1
+    jnz .input$
+
     bind KEY.P,     game.pause
 
-    j.paused? .input$
+    test byte [game.paused], 1
+    jnz .input$
 
     bind KEY.LEFT,  current.left
     bind KEY.RIGHT, current.right
@@ -128,7 +145,9 @@ game.loop:
     add esp, 2
 
   .update:
-    j.paused? .draw
+    ; game.paused || game.over
+    cmp word [game.paused], 0
+    jne .draw
 
     call.update gravity.lock
     call.update gravity.fall
@@ -153,6 +172,7 @@ game.loop:
     call hold.draw
     call game.paused.draw
     call score.draw
+    call game.over.draw
 
   xor ebx, ebx
   jmp game.loop

@@ -5,6 +5,8 @@
 
 section .data
 
+extern game.over
+
 well:
   ; First two rows have invisible walls.
 %rep well.PAD.TOP
@@ -155,6 +157,10 @@ well.lock:
     add edi, well.WIDTH * 2
 
     loop .yloop
+
+  ; Lock out game over condition.
+  cmp byte [ebp + 11], 0 ; y
+  sete byte [game.over]
 
   pop edi
   pop esi
