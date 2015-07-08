@@ -79,4 +79,6 @@ GDB_FLAGS = -ex 'set disassembly-flavor intel' -ex 'display/i $$pc' -ex 'target 
 gdb: $(KERNEL)
 	$(GDB) $(GDB_FLAGS) $<
 
+-include config.mk
+
 .PHONY: kernel iso clean qemu qemu-iso gdb
