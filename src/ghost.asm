@@ -29,6 +29,10 @@ ghost.update:
   mov ecx, 16
   rep movsd
 
+  ; Return if current tetromino is null (game over).
+  cmp esi, tetrominoes + 0x40
+  je .ret
+
   ; Remove background color from ghost sprite.
   mov edi, ghost.sprite
   mov ecx, 16
@@ -56,9 +60,11 @@ ghost.update:
     mov [ghost.coords], ax
 
   add esp, 4
-  pop edi
-  pop esi
-  ret
+
+  .ret:
+    pop edi
+    pop esi
+    ret
 
 ; ghost.draw()
 ; Draw the ghost.

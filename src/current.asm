@@ -31,7 +31,19 @@ current.spawn:
   mov [current.offset], ax
   mov word [current.coords], well.WIDTH / 2 - 4
   or byte [hold.available?], 1
-  ret
+
+  ; Block out game over condition.
+  push dword [current.offset]
+  call well.collide?
+  jnz .ret
+
+  mov word [current.offset], 0
+  mov byte [game.over], 1
+
+  .ret:
+    add esp, 4
+    inc eax
+    ret
 
 ; current.lock()
 ; Lock the current tetromino in the well and spawn another.
