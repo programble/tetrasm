@@ -9,4 +9,4 @@
 %define KEY.LEFT  0x4B
 %define KEY.RIGHT 0x4D
 %define KEY.ENTER 0x1C
-%define KEY.SHIFT 0x2A
+%define KEY.SHIFT 0x36
