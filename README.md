@@ -2,8 +2,10 @@
 
 Tetris for x86 in NASM.
 
-Mostly a port from C of
+Somewhat a port from C of
 [Bare Metal Tetris](https://github.com/programble/bare-metal-tetris).
+
+![Screenshot](https://raw.githubusercontent.com/programble/tetrasm/master/screenshot.png)
 
 ## Dependencies
 
