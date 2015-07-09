@@ -1,5 +1,7 @@
 %include "video.mac"
 
+%defstr VERSION.STR VERSION
+
 %define C FG.BRIGHT | FG.CYAN    | BG.CYAN
 %define B FG.BRIGHT | FG.BLUE    | BG.BLUE
 %define A FG.BRIGHT | FG.GRAY    | BG.GRAY
@@ -21,7 +23,7 @@ title:
   dw R, 'M' | R, R
   dw C,C,C,B,B,B,A,A,A,Y,Y,Y,G,G,G,M,M,M,R,R,R
 
-info db 'Tetrasm https://github.com/programble/tetrasm', 0
+info db 'Tetrasm ', VERSION.STR, ' https://github.com/programble/tetrasm', 0
 
 section .text
 

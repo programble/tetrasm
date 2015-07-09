@@ -1,12 +1,13 @@
 BUILD = debug
+VERSION := $(shell git describe --tags --always || echo '?')
 
 # Build
 
 NASM = nasm
 LD = ld
 
-NASM_FLAGS = -f elf32 -i src/
-LD_FLAGS = -melf_i386 -nostdlib -T linker.ld
+NASM_FLAGS = -f elf32 -i src/ -d VERSION=$(VERSION)
+LD_FLAGS = -m elf_i386 -nostdlib -T linker.ld
 
 ifneq (,$(findstring debug,$(BUILD)))
   override NASM_FLAGS += -g -d DEBUG
