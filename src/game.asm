@@ -26,6 +26,7 @@ extern hold
 extern gravity.fall, gravity.lock
 extern well.lines.detect, well.lines.animate, well.lines.clear
 extern well.draw, current.draw, ghost.draw, preview.draw, hold.draw, score.draw
+extern help.toggle, help.draw
 
 %ifdef DEBUG
 extern debug.cycle, debug.draw
@@ -121,15 +122,16 @@ game.loop:
     push ax
 
 %ifdef DEBUG
-    bind KEY.D,     debug.cycle
+    bind KEY.D, debug.cycle
 %endif
 
-    bind KEY.R,     reset
+    bind KEY.R, reset
+    bind KEY.H, help.toggle
 
     test byte [game.over], 1
     jnz .input$
 
-    bind KEY.P,     game.pause
+    bind KEY.P, game.pause
 
     test byte [game.paused], 1
     jnz .input$
@@ -173,6 +175,7 @@ game.loop:
     call game.paused.draw
     call score.draw
     call game.over.draw
+    call help.draw
 
   xor ebx, ebx
   jmp game.loop
