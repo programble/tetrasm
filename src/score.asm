@@ -59,7 +59,7 @@ score.draw:
   push score.label
   call puts
 
-  push word 0x0A0A
+  push word 0x0A09
   push dword [score]
   call itoa
 
@@ -67,16 +67,17 @@ score.draw:
   push eax
   call puts
 
+  add esp, 22
+
   push dword level.Y << 24 | (level.X + 2) << 16 | FG.BLUE
   push level.label
   call puts
 
-  ; Back to the last parameter to the last itoa.
-  add esp, 20
+  push word 0x0A03
   push dword [level]
   call itoa
 
-  push dword (level.Y + 2) << 24 | level.X << 16 | FG.BRIGHT | FG.BLUE
+  push dword (level.Y + 2) << 24 | (level.X + 3) << 16 | FG.BRIGHT | FG.BLUE
   push eax
   call puts
 
