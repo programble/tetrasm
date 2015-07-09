@@ -51,6 +51,35 @@ score.drop:
   add [score], eax
   ret
 
+; score.lines(dword lines)
+; Award points for lines cleared.
+global score.lines
+score.lines:
+  push ebp
+  mov ebp, esp
+
+  ; Index into score factors.
+  mov ecx, [esp + 8] ; lines
+  mov eax, [score.factors + ecx * 4 - 4]
+
+  ; Increase score by factor * level.
+  mul dword [level]
+  add [score], eax
+
+  add [level.lines], ecx
+  cmp dword [level.lines], 10
+  jb .ret
+
+  ; Level up!
+  inc dword [level]
+  mov dword [level.lines], 0
+  call gravity.update
+
+  .ret:
+    mov esp, ebp
+    pop ebp
+    ret
+
 ; score.draw()
 ; Draw the score and level.
 global score.draw
@@ -83,32 +112,3 @@ score.draw:
 
   add esp, 22
   ret
-
-; score.lines(dword lines)
-; Award points for lines cleared.
-global score.lines
-score.lines:
-  push ebp
-  mov ebp, esp
-
-  ; Index into score factors.
-  mov ecx, [esp + 8] ; lines
-  mov eax, [score.factors + ecx * 4 - 4]
-
-  ; Increase score by factor * level.
-  mul dword [level]
-  add [score], eax
-
-  add [level.lines], ecx
-  cmp dword [level.lines], 10
-  jb .ret
-
-  ; Level up!
-  inc dword [level]
-  mov dword [level.lines], 0
-  call gravity.update
-
-  .ret:
-    mov esp, ebp
-    pop ebp
-    ret
