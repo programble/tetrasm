@@ -7,6 +7,17 @@ Somewhat a port from C of
 
 ![Screenshot](https://raw.githubusercontent.com/programble/tetrasm/master/screenshot.png)
 
+## Features
+
+- Ghost
+- Preview
+- Hold
+- Scoring
+- Levels with increasing gravity
+- Line clear "animation"
+- Lock delay with limited movement
+- Pause
+
 ## Dependencies
 
 - [NASM][nasm], with support for `elf32` output format
