@@ -1,5 +1,5 @@
 *.o
 *.elf
+*.iso
 iso
-tetrasm.iso
 config.mk
