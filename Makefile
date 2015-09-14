@@ -29,6 +29,21 @@ $(KERNEL): linker.ld $(OBJECTS)
 %.o: %.asm
 	$(NASM) $(NASM_FLAGS) $^ -o $@
 
+# COM build
+
+COM_NASM_FLAGS = -d COM -f bin -i src/ -d VERSION=$(VERSION)
+
+ifneq (,$(findstring test,$(BUILD)))
+  override COM_NASM_FLAGS += -d TEST
+endif
+
+COM = tetrasm.com
+
+com: $(COM)
+
+$(COM): src/com.asm
+	$(NASM) $(COM_NASM_FLAGS) $^ -o $@
+
 # ISO
 
 GENISOIMAGE = genisoimage
@@ -55,7 +70,7 @@ iso/boot/grub/menu.lst: menu.lst
 	cp $< $@
 
 clean:
-	rm -rf $(ISO) iso $(KERNEL) $(OBJECTS)
+	rm -rf $(ISO) iso $(COM) $(KERNEL) $(OBJECTS)
 
 # Emulation
 
@@ -72,6 +87,12 @@ qemu: $(KERNEL)
 qemu-iso: $(ISO)
 	$(QEMU) $(QEMU_FLAGS) -cdrom $<
 
+DOSBOX = dosbox
+DOSBOX_FLAGS =
+
+dosbox: $(COM)
+	$(DOSBOX) $<
+
 # Debugger
 
 GDB = gdb
@@ -82,4 +103,4 @@ gdb: $(KERNEL)
 
 -include config.mk
 
-.PHONY: kernel iso clean qemu qemu-iso gdb
+.PHONY: kernel com iso clean qemu qemu-iso gdb
