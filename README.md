@@ -76,13 +76,14 @@ This will create a bootable ISO using GRUB Legacy, `tetrasm.iso`.
 ## Emulation
 
 ```
-make qemu
+make qemu BUILD=release
 ```
 
 This will boot `tetrasm.elf` in QEMU using multiboot.
+If run in the debug build, waits for a debugger to attach.
 
 ```
-make qemu-iso
+make qemu-iso BUILD=release
 ```
 
 This will boot `tetrasm.iso` in QEMU.
