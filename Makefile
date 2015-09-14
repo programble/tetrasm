@@ -54,8 +54,15 @@ iso/boot/grub/menu.lst: menu.lst
 	@mkdir -p iso/boot/grub
 	cp $< $@
 
+IMG = tetrasm.img
+img: $(IMG)
+
+$(IMG): tetrasm.elf isodir/boot/grub/grub.cfg
+	cp tetrasm.elf isodir/boot
+	grub-mkrescue -o '$@' isodir
+
 clean:
-	rm -rf $(ISO) iso $(KERNEL) $(OBJECTS)
+	rm -rf $(ISO) iso $(KERNEL) $(OBJECTS) $(IMG) isodir/boot/*.elf
 
 # Emulation
 
@@ -72,6 +79,9 @@ qemu: $(KERNEL)
 qemu-iso: $(ISO)
 	$(QEMU) $(QEMU_FLAGS) -cdrom $<
 
+qemu-img: $(IMG)
+	$(QEMU) $(QEMU_FLAGS) -hda $<
+
 # Debugger
 
 GDB = gdb
@@ -82,4 +92,4 @@ gdb: $(KERNEL)
 
 -include config.mk
 
-.PHONY: kernel iso clean qemu qemu-iso gdb
+.PHONY: kernel iso clean qemu qemu-iso gdb img
