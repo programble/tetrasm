@@ -4,8 +4,6 @@ section .text
 ; Generate a random number from 0 inclusive to range exclusive.
 global rand
 rand:
-  push ebp
-  mov ebp, esp
 
   rdtsc
 
@@ -16,8 +14,6 @@ rand:
   div dword [ebp + 8] ; range
   mov eax, edx
 
-  mov esp, ebp
-  pop ebp
   ret
 
 ; shuffleb(dword array, dword length)
